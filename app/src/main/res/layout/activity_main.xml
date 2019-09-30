@@ -7,13 +7,23 @@
     android:id="@+id/mainactivity"
     android:background="#88eae6">
 
-<Button
+    <Button
         android:id="@+id/launch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Manga Demo"
         android:layout_centerInParent="true"
         android:onClick="testManga"
+        />
+
+    <Button
+        android:id="@+id/launch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Epub Demo"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/launch"
+        android:onClick="testEpub"
         />
 
 </RelativeLayout>

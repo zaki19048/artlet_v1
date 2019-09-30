@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.folioreader.FolioReader;
+
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper db;
     MangaReader mr;
@@ -31,5 +33,11 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent newIntent = new Intent(this, MangaReader.class);
         startActivity(newIntent);
+    }
+
+    public void testEpub(View view)
+    {
+        FolioReader folioReader = FolioReader.get();
+        folioReader.openBook(R.raw.lightningthief);
     }
 }
