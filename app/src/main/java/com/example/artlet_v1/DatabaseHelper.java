@@ -1,8 +1,17 @@
 package com.example.artlet_v1;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.artlet_v1.TableUser.TableUserClass;
+import com.example.artlet_v1.TableGenre.TableGenreClass;
+import com.example.artlet_v1.TableContent.TableContentClass;
+import com.example.artlet_v1.TableTag.TableTagClass;
+import com.example.artlet_v1.TableUserGenre.*;
+import java.sql.Timestamp;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Logcat tag
@@ -12,29 +21,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "artlet";
 
     // Table Names
-    private static final String TABLE_Users= "user";
-    private static final String TABLE_Genre = "genre";
-    private static final String TABLE_Content = "content";
-    private static final String TABLE_Tags = "tag";
-    private static final String TABLE_User_Genre = "user_genre";
+    // private static final String TABLE_Users= "user";
+    // private static final String TABLE_Genre = "genre";
+    // private static final String TABLE_Content = "content";
+    // private static final String TABLE_Tags = "tag";
+    // private static final String TABLE_User_Genre = "user_genre";
 
-
-    private static final String CREATE_TABLE_User = "CREATE TABLE user (id INT(11) NOT NULL, name VARCHAR(255),email VARCHAR(255),password VARCHAR(255),location VARCHAR,created_at TIMESTAMP ,PRIMARY KEY (id)\n)";
+    // user table create statement
+    private static final String CREATE_TABLE_User = "CREATE TABLE " + TableUserClass.TABLE_Users + "( " + TableUserClass.USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + TableUserClass.USER_NAME +" VARCHAR(255)," + TableUserClass.USER_EMAIL +" VARCHAR(255),"+ TableUserClass.USER_PASSWORD + " VARCHAR(255), " + TableUserClass.USER_LOCATION + " VARCHAR(255), " + TableUserClass.USER_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )";
 
     // genre table create statement
-    private static final String CREATE_TABLE_Genre = "CREATE TABLE `genre` (id INT(11) NOT NULL ,name VARCHAR(255),created_at TIMESTAMP ,PRIMARY KEY (id))";
+    private static final String CREATE_TABLE_Genre = "CREATE TABLE " + TableGenreClass.TABLE_Genre + "( " + TableGenreClass.GENRE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableGenreClass.GENRE_NAME + " VARCHAR(255), " + TableGenreClass.GENRE_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )\n ";
 
     // content table create statement
-    private static final String CREATE_TABLE_Content = "CREATE TABLE content (id INT(11)  NOT NULL,title VARCHAR(255),author_id INT(11) NOT NULL,genre_id INT(11),type VARCHAR(255),file VARCHAR(255),created_at TIMESTAMP ,PRIMARY KEY (id)\n)";
+    private static final String CREATE_TABLE_Content = "CREATE TABLE " + TableContentClass.TABLE_Content + " ( " + TableContentClass.CONTENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableContentClass.CONTENT_TITLE + " VARCHAR(255), " + TableContentClass.CONTENT_AUTHORID + " INT(11) NOT NULL, " + TableContentClass.CONTENT_GENREID + " INT(11), " + TableContentClass.CONTENT_TYPE + " VARCHAR(255), " + TableContentClass.CONTENT_FILE + " VARCHAR(255), " + TableContentClass.CONTENT_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )\n";
 
-    private static final String CREATE_TABLE_Tag = "CREATE TABLE tag (id INT(11) NOT NULL,content_id INT(11) ,name VARCHAR(255) NOT NULL,created_at TIMESTAMP,PRIMARY KEY (id))";
+    //tag tabel create statement
+    private static final String CREATE_TABLE_Tag = "CREATE TABLE " + TableTagClass.TABLE_Tags + " ( " + TableTagClass.TAG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableTagClass.TAG_CONTENTID + " INT(11) , " + TableTagClass.TAG_NAME + " VARCHAR(255) NOT NULL, " + TableTagClass.TAG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )";
 
-    private static final String CREATE_TABLE_User_Genre = "CREATE TABLE user_genre (id INT(11) NOT NULL,genre_id INT(11) ,user_id INT(11),created_at TIMESTAMP ,PRIMARY KEY (id))";
+    //user_genre table create statement
+    private static final String CREATE_TABLE_User_Genre = "CREATE TABLE " + TableUserGenreClass.TABLE_User_Genre + " ( " + TableUserGenreClass.USERGENRE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableUserGenreClass.UG_GENREID + " INT(11) REFERENCES " + TableGenreClass.GENRE_ID + ", " + TableUserGenreClass.UG_USERID + " INT(11), " + TableUserGenreClass.UG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )";
+
+    // SQLiteDatabase object to write and read the database created
     private SQLiteDatabase db;
 
     public  DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         this.db = this.getWritableDatabase();
+        Log.d("Database Created", "Inside Database helper");
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -45,16 +59,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_Tag);
         db.execSQL(CREATE_TABLE_Content);
         db.execSQL(CREATE_TABLE_User_Genre);
+        Log.d("Tables Created", "Inside OnCreate");
     }
+
+    public void InsertUserData(DatabaseHelper dh,  String user_name, String user_email, String user_password, String user_location)
+    {
+        db = getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(TableUserClass.USER_EMAIL, user_email);
+        c.put(TableUserClass.USER_NAME, user_name);
+        c.put(TableUserClass.USER_PASSWORD, user_password);
+        c.put(TableUserClass.USER_LOCATION, user_location);
+        db.insert(TableUserClass.TABLE_Users, null, c);
+        Log.d("Inside InsertUSerData", "One row inserted");
+    }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Users);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Tags);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Genre);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Content);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_User_Genre);
+        db.execSQL("DROP TABLE IF EXISTS " + TableUserClass.TABLE_Users);
+        db.execSQL("DROP TABLE IF EXISTS " + TableTagClass.TABLE_Tags);
+        db.execSQL("DROP TABLE IF EXISTS " + TableGenreClass.TABLE_Genre);
+        db.execSQL("DROP TABLE IF EXISTS " + TableContentClass.TABLE_Content);
+        db.execSQL("DROP TABLE IF EXISTS " + TableUserGenreClass.TABLE_User_Genre);
 
         // create new tables
         onCreate(db);
