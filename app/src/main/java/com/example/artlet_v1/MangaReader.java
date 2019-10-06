@@ -3,15 +3,20 @@ package com.example.artlet_v1;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.ContextWrapper;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MangaReader extends AppCompatActivity {
 
@@ -25,38 +30,52 @@ public class MangaReader extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manga_reader);
         viewpager = findViewById(R.id.pager);
-        //loadDemoImages();
+        createFolder("imageDir");
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getExternalFilesDir("imageDir/Blep");
+        List<File> fileList = new ArrayList<>();
+        for(int i=4;i<20;i++)
+        {
+            File file = new File(directory, "m" +i+ ".jpg");
+            fileList.add(file);
+        }
+        ImageFragment.images = fileList;
+
         adapter = new FragmentCollectionAdapter(getSupportFragmentManager());
         viewpager.setAdapter(adapter);
         viewpager.setPageTransformer(false, new ZoomOutPageTransformer());
     }
 
-   /* void loadDemoImages()
-    {
-        drawables = new int[]{R.drawable.m4, R.drawable.m5, R.drawable.m6,R.drawable.m7,
-                R.drawable.m8, R.drawable.m9, R.drawable.m10, R.drawable.m11, R.drawable.m12,
-                R.drawable.m13, R.drawable.m14, R.drawable.m15, R.drawable.m16, R.drawable.m17,
-                R.drawable.m18, R.drawable.m19, R.drawable.m20 };
-        InputStream inputStream = null;
-        try {
-
-            AssetManager assetManager = getAssets();
-            String[] images = assetManager.list("op");
-            Log.d("nicki", ""+images.length);
-            drawables = new Drawable[images.length];
-            for (int i = 0; i < images.length; i++) {
-                Log.d("nicki", "dogs/" + images[i]);
-                Log.d("nicki", "i = " + i);
-
-                //       inputStream = assetManager.open("dogs/" + images[i]);
-                //Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-         //       Drawable drawable = Drawable.createFromStream(inputStream, null);
-         //       drawables[i] = drawable;
+    public void createFolder(String fname) {
+        String myfolder = getApplicationContext().getExternalFilesDir("/") + "/" + fname;
+        File f = new File(myfolder);
+        if (!f.exists())
+            if (!f.mkdir()) {
+                Toast.makeText(this, myfolder + " can't be created.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, myfolder + " can be created.", Toast.LENGTH_LONG).show();
+                f.mkdirs();
             }
-        } catch (IOException e) {
-            Log.d("nicki", "IMAGE READING FAILED");
-        }
-      }
-        */
+        else
+            Toast.makeText(this, myfolder + " already exits.", Toast.LENGTH_LONG).show();
 
+        f = new File(getApplicationContext().getExternalFilesDir("/") + "/" + fname + "/" + "Blep");
+        if (!f.exists())
+        {
+            Toast.makeText(this, "Unzipped", Toast.LENGTH_LONG).show();
+            String zipfilename = "Blep";
+            String zipFile = myfolder + "/" + zipfilename + ".zip";
+            String unzipLocation = myfolder + "/" + zipfilename + "/";
+            Log.d("Zip", zipFile);
+            Log.d("Zip Loc ", myfolder);
+            ZipDecompress df = new ZipDecompress(zipFile, unzipLocation);
+            df.unzip();
+        }
+        else
+        {
+            Toast.makeText(this, "Already Unzipped", Toast.LENGTH_LONG).show();
+        }
+
+    }
 }

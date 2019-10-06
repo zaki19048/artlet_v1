@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.folioreader.FolioReader;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper db;
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.mainactivity, searchFragment, "Search_Fragment");
         fragmentTransaction.commit();
+
+
     }
 
     public void testManga(View view)
