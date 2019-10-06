@@ -1,5 +1,6 @@
 package com.example.artlet_v1;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,9 @@ import android.widget.TextView;
 
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 
+import java.io.File;
+import java.util.List;
+
 public class ImageFragment extends Fragment {
 
     private ImageView imageView;
@@ -20,7 +24,7 @@ public class ImageFragment extends Fragment {
             R.drawable.m8, R.drawable.m9, R.drawable.m10, R.drawable.m11, R.drawable.m12,
             R.drawable.m13, R.drawable.m14, R.drawable.m15, R.drawable.m16, R.drawable.m17,
             R.drawable.m18, R.drawable.m19, R.drawable.m20 };;
-
+    static List<File> images;
 
     public ImageFragment() { }
 
@@ -29,9 +33,8 @@ public class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
         imageView = view.findViewById(R.id.image);
         int pos = getArguments().getInt("pos");
-        imageView.setImageResource(myImageList[pos%myImageList.length]);
-        //imageView.setImageResource(MangaReader.drawables[pos%MangaReader.drawables.length]);
-        //imageView.setImageDrawable(MangaReader.drawables[pos%MangaReader.drawables.length]);
+        //imageView.setImageResource(myImageList[pos%myImageList.length]);
+        imageView.setImageDrawable(Drawable.createFromPath(images.get(pos%images.size()).toString()));
         imageView.setOnTouchListener(new ImageMatrixTouchHandler(view.getContext()));
         return view;
     }
