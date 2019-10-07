@@ -1,49 +1,20 @@
 package com.example.artlet_v1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-//import DatabaseHelper;
-
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.widget.SearchView;
 
-import com.folioreader.FolioReader;
+import androidx.appcompat.app.AppCompatActivity;
 
-/*public class MainActivity extends AppCompatActivity {
-    DatabaseHelper db;
-    MangaReader mr;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-        //this.db = new DatabaseHelper(getApplicationContext());
-        Search_Fragment searchFragment = new Search_Fragment();
-        FragmentManager mFragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.mainactivity, searchFragment, "Search_Fragment");
-        fragmentTransaction.commit();
-    }
-
-    public void testManga(View view)
-    {
-        Intent newIntent = new Intent(this, MangaReader.class);
-        startActivity(newIntent);
-    }
-
-    public void testEpub(View view)
-    {
-        FolioReader folioReader = FolioReader.get();
-        folioReader.openBook(R.raw.lightningthief);
-    }
-}*/
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +22,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.db = new DatabaseHelper(getApplicationContext());
         DatabaseHelper d1 = new DatabaseHelper(this);
+//        this.db.InsertGenreData();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
+//
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
+//                intent.putExtra("query", query);
+//                startActivity(intent);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+        searchView.setSearchableInfo( searchManager.getSearchableInfo(new
+                ComponentName(this,SearchResultsActivity.class)));
+//        searchView.setIconifiedByDefault(true);
+//        Intent intent = new Intent(this, SearchResultsActivity.class);
+        return true;
+    }
+
+
 
     public void show_login(View v)
     {

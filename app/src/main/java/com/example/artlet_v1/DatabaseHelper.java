@@ -6,12 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.artlet_v1.TableUser.TableUserClass;
-import com.example.artlet_v1.TableGenre.TableGenreClass;
 import com.example.artlet_v1.TableContent.TableContentClass;
+import com.example.artlet_v1.TableGenre.TableGenreClass;
 import com.example.artlet_v1.TableTag.TableTagClass;
-import com.example.artlet_v1.TableUserGenre.*;
-import java.sql.Timestamp;
+import com.example.artlet_v1.TableUser.TableUserClass;
+import com.example.artlet_v1.TableUserGenre.TableUserGenreClass;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Logcat tag
@@ -43,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_User_Genre = "CREATE TABLE " + TableUserGenreClass.TABLE_User_Genre + " ( " + TableUserGenreClass.USERGENRE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableUserGenreClass.UG_GENREID + " INT(11) REFERENCES " + TableGenreClass.GENRE_ID + ", " + TableUserGenreClass.UG_USERID + " INT(11), " + TableUserGenreClass.UG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )";
 
     // SQLiteDatabase object to write and read the database created
-    private SQLiteDatabase db;
+    protected SQLiteDatabase db;
 
     public  DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);

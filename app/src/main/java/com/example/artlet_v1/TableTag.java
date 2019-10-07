@@ -16,7 +16,5 @@ public class TableTag {
         public static final String TAG_NAME = "name";
         public static final String TAG_CREATED_AT = "created_at";
         public static final String TABLE_Tags = "tag";
-
     }
-
 }
