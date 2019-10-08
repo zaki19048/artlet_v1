@@ -2,11 +2,13 @@ package com.example.artlet_v1.DbProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.artlet_v1.DatabaseHelper;
 import com.example.artlet_v1.TableContent;
+import com.example.artlet_v1.TableUser;
 
 public class ContentTableProvider extends DatabaseHelper {
 
@@ -15,7 +17,6 @@ public class ContentTableProvider extends DatabaseHelper {
     public ContentTableProvider(Context context) {
 
         super(context);
-        Log.d("Inside constructor", "Check");
     }
 
     public void populateRowContent(String randomString, int foreignKey) {
@@ -27,16 +28,19 @@ public class ContentTableProvider extends DatabaseHelper {
         c.put(TableContent.TableContentClass.CONTENT_GENREID, foreignKey);
         c.put(TableContent.TableContentClass.CONTENT_AUTHORID, foreignKey);
         c.put(TableContent.TableContentClass.CONTENT_TYPE, randomString);
+        c.put(TableContent.TableContentClass.CONTENT_FILE, randomString);
         db.insert(TableContent.TableContentClass.TABLE_Content, null, c);
     }
 
     public void populateDataContent() {
-        int i = 0;
-        while(i < 50) {
-            populateRowContent(String.valueOf(i), i);
+        int i = 1;
+        while(i <= 50) {
+            populateRowContent(Integer.toString(i), i);
             i=i+1;
         }
     }
+
+
 
 }
 

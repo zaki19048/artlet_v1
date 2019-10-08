@@ -24,9 +24,9 @@ public class UserGenreTableProvider extends DatabaseHelper {
     }
 
     public void populateDataUserGenre() {
-        int i = 0;
-        while(i < 50) {
-            populateRowUserGenre(String.valueOf(i), i);
+        int i = 1;
+        while(i <= 50) {
+            populateRowUserGenre(Integer.toString(i), i);
             i=i+1;
         }
     }
