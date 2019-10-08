@@ -9,16 +9,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="17dp" />
+            android:textSize="21dp" />
 
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/name"
-            android:layout_alignBottom="@+id/name"
-            android:layout_alignParentRight="true"
-            android:textColor="#343434"
-            android:textSize="14dp" />
+<!--        <TextView-->
+<!--            android:id="@+id/location"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignBaseline="@+id/name"-->
+<!--            android:layout_alignBottom="@+id/name"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:textColor="#343434"-->
+<!--            android:textSize="14dp" />-->
     </RelativeLayout>
 

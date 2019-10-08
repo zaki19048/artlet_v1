@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.db = new DatabaseHelper(getApplicationContext());
-        DatabaseHelper d1 = new DatabaseHelper(this);
+//        DatabaseHelper d1 = new DatabaseHelper(this);
 //        this.db.InsertGenreData();
     }
 
