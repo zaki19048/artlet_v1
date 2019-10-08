@@ -9,16 +9,19 @@ import android.util.Log;
 import com.example.artlet_v1.DatabaseHelper;
 import com.example.artlet_v1.TableUser;
 
+import java.util.Random;
+
 public class UserTableProvider extends DatabaseHelper {
 
     SQLiteDatabase db;
+    String initial = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     public UserTableProvider(Context context) {
 
         super(context);
     }
 
-    public void populateRowUser(String randomString, int foreignKey) {
+    public void populateRowUser(String randomString, int dummyInt) {
 
         db = getWritableDatabase();
         ContentValues c = new ContentValues();
@@ -29,10 +32,21 @@ public class UserTableProvider extends DatabaseHelper {
         db.insert(TableUser.TableUserClass.TABLE_Users, null, c);
     }
 
+    public String randomGenerator(String p)
+    {
+        StringBuilder s = new StringBuilder();
+        Random r = new Random();
+        for (int i = 0; i < 7; i++) {
+            s.append(p.charAt(r.nextInt(p.length())));
+        }
+
+        return s.toString();
+    }
+
     public void populateDataUser() {
         int i = 1;
         while(i <= 50) {
-            populateRowUser(Integer.toString(i), i);
+            populateRowUser(randomGenerator(initial), i);
             i=i+1;
         }
     }
