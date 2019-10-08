@@ -25,9 +25,9 @@ public class TagTableProvider extends DatabaseHelper {
     }
 
     public void populateDataTag() {
-        int i = 0;
-        while(i < 50) {
-            populateRowTag(String.valueOf(i), i);
+        int i = 1;
+        while(i <= 50) {
+            populateRowTag(Integer.toString(i), i);
             i=i+1;
         }
     }
