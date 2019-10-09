@@ -1,20 +1,14 @@
 package com.example.artlet_v1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.ContextWrapper;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +70,5 @@ public class MangaReader extends AppCompatActivity {
         {
             Toast.makeText(this, "Already Unzipped", Toast.LENGTH_LONG).show();
         }
-
     }
 }

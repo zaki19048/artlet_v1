@@ -2,9 +2,7 @@ package com.example.artlet_v1.DbProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.example.artlet_v1.DatabaseHelper;
 import com.example.artlet_v1.TableUser;
@@ -30,6 +28,7 @@ public class UserTableProvider extends DatabaseHelper {
         c.put(TableUser.TableUserClass.USER_PASSWORD, randomString);
         c.put(TableUser.TableUserClass.USER_LOCATION, randomString);
         db.insert(TableUser.TableUserClass.TABLE_Users, null, c);
+        db.close();
     }
 
     public String randomGenerator(String p)

@@ -25,6 +25,7 @@ public class TagTableProvider extends DatabaseHelper {
         c.put(TableTag.TableTagClass.TAG_ID, dummyInt);
         c.put(TableTag.TableTagClass.TAG_NAME, randomString);
         db.insert(TableTag.TableTagClass.TABLE_Tags, null, c);
+        db.close();
     }
 
     public String randomGenerator(String p)

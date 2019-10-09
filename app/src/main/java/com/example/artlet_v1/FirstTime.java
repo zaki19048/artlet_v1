@@ -4,9 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.artlet_v1.DatabaseHelper;
 import com.example.artlet_v1.DbProvider.ContentTableProvider;
 import com.example.artlet_v1.DbProvider.GenreTableProvider;
 import com.example.artlet_v1.DbProvider.TagTableProvider;
@@ -29,7 +27,7 @@ public class FirstTime extends Application {
             Log.d("Inside if","bool is false");
             this.db = new DatabaseHelper(getApplicationContext());
             DatabaseHelper d1 = new DatabaseHelper(this);
-            d1.InsertGenreData(d1);
+            d1.InsertGenreData();
             GenreTableProvider g1 = new GenreTableProvider(this);
             UserTableProvider u0 = new UserTableProvider(this);
             ContentTableProvider c1 = new ContentTableProvider(this);

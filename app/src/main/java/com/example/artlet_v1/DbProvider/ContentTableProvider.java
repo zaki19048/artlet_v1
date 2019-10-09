@@ -2,13 +2,10 @@ package com.example.artlet_v1.DbProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.example.artlet_v1.DatabaseHelper;
 import com.example.artlet_v1.TableContent;
-import com.example.artlet_v1.TableUser;
 
 import java.util.Random;
 
@@ -16,6 +13,12 @@ public class ContentTableProvider extends DatabaseHelper {
 
     SQLiteDatabase db;
     String initial = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    String[] types = {
+            "pdf",
+            "epub",
+            "doc",
+            "manga"
+    };
 
 
     public ContentTableProvider(Context context) {
@@ -23,7 +26,7 @@ public class ContentTableProvider extends DatabaseHelper {
         super(context);
     }
 
-    public void populateRowContent(String randomString, int dummyInt) {
+    public void populateRowContent(String randomString, int dummyInt, String type) {
 
         db = getWritableDatabase();
         ContentValues c = new ContentValues();
@@ -31,9 +34,10 @@ public class ContentTableProvider extends DatabaseHelper {
         c.put(TableContent.TableContentClass.CONTENT_TITLE, randomString);
         c.put(TableContent.TableContentClass.CONTENT_GENREID, dummyInt);
         c.put(TableContent.TableContentClass.CONTENT_AUTHORID, dummyInt);
-        c.put(TableContent.TableContentClass.CONTENT_TYPE, randomString);
+        c.put(TableContent.TableContentClass.CONTENT_TYPE, type);
         c.put(TableContent.TableContentClass.CONTENT_FILE, randomString);
         db.insert(TableContent.TableContentClass.TABLE_Content, null, c);
+        db.close();
     }
 
     public String randomGenerator(String p)
@@ -59,13 +63,13 @@ public class ContentTableProvider extends DatabaseHelper {
         while(i <= 100) {
             if(i<=50)
             {
-                populateRowContent(randomGenerator(initial), i);
+                populateRowContent(randomGenerator(initial), i, this.types[new Random().nextInt(4)]);
             }
 
             if(i>50)
             {
                 int index = new Random().nextInt(rep.length);
-                populateRowContent(rep[index], i);
+                populateRowContent(rep[index], i, this.types[new Random().nextInt(4)]);
 
             }
             i=i+1;

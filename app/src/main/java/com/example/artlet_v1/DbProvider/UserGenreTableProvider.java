@@ -24,6 +24,7 @@ public class UserGenreTableProvider extends DatabaseHelper {
         c.put(TableUserGenre.TableUserGenreClass.UG_GENREID, dummyInt);
         c.put(TableUserGenre.TableUserGenreClass.UG_USERID, dummyInt);
         db.insert(TableUserGenre.TableUserGenreClass.TABLE_User_Genre, null, c);
+        db.close();
     }
 
     public String randomGenerator(String p)

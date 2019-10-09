@@ -20,5 +20,4 @@ public class TableUser {
         public static final String TABLE_Users= "user";
 
     }
-
 }

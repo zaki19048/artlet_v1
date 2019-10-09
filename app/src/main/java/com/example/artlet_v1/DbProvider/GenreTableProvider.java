@@ -2,7 +2,6 @@ package com.example.artlet_v1.DbProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.artlet_v1.DatabaseHelper;
@@ -25,6 +24,7 @@ public class GenreTableProvider extends DatabaseHelper {
         ContentValues c = new ContentValues();
         c.put(TableGenre.TableGenreClass.GENRE_NAME, randomString);
         db.insert(TableGenre.TableGenreClass.TABLE_Genre, null, c);
+        db.close();
     }
 
     public String randomGenerator(String p)
