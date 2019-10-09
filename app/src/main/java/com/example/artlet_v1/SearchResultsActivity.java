@@ -45,20 +45,17 @@ public class SearchResultsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(SearchResultsActivity.this, SearchResultsActivity.class);
-                intent.putExtra("query", query);
-                startActivity(intent);
+                queryLiveSearch(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                Intent intent = new Intent(SearchResultsActivity.this, SearchResultsActivity.class);
-                intent.putExtra("query", query);
-                startActivity(intent);
+                queryLiveSearch(query);
                 return false;
             }
         });
@@ -84,23 +81,29 @@ public class SearchResultsActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d("search", "onNewIntent");
+//        Log.d("search", "onNewIntent");
         handleIntent(intent);
     }
 
+    private void queryLiveSearch(String query) {
+        Intent intent = new Intent(SearchResultsActivity.this, SearchResultsActivity.class);
+        intent.putExtra("query", query);
+        startActivity(intent);
+    }
+
     private void handleIntent(Intent intent) {
-        Log.d("search", "intentReceived");
+//        Log.d("search", "intentReceived");
         String query = intent.getStringExtra(SearchManager.QUERY);
         this.query = query;
-        showResults(query);
+        showResults();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
              query = intent.getStringExtra(SearchManager.QUERY);
-        showResults(query);
+        showResults();
         }
     }
 
-    private void showResults(String query) {
-        Log.d("search", query);
+    private void showResults() {
+//        Log.d("search", query);
         fetchDatabaseResults();
         displayResultList();
 
@@ -118,45 +121,34 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         try {
             String lowerQuery = this.query.toLowerCase();
-            //Join query to be used : private final String MY_QUERY = "SELECT id, name, type , file,  FROM content c1 INNER JOIN tag ON content.id=tag.content_id WHERE tag.name like ?";
-            //db.rawQuery(MY_QUERY, new String[]{String.valueOf(propertyId)});
-            Cursor c = db.rawQuery("SELECT id, name FROM genre WHERE LOWER(name) like ?", new String[] {"%" + lowerQuery + "%"});
-//            Cursor c = db.rawQuery("SELECT id, name FROM genre", null);
 
-            int count = 0;
+            Cursor c = db.rawQuery("SELECT c1.id, title, type , file, c1.created_at  FROM content c1 INNER JOIN tag ON c1.id=tag.content_id WHERE LOWER(tag.name) LIKE ?  UNION \n" +
+                    "SELECT c1.id, title, type , file, c1.created_at  FROM content c1 INNER JOIN genre ON c1.genre_id=genre.id WHERE LOWER(genre.name) LIKE ?  UNION\n" +
+                    "SELECT c1.id, c1.title, c1.type , c1.file, c1.created_at  FROM content c1 INNER JOIN content c2 ON c1.id=c2.id WHERE LOWER(c1.title) LIKE ? ORDER BY c1.created_at DESC", new String[] {"%" + lowerQuery + "%", "%" + lowerQuery + "%", "%" + lowerQuery + "%"});
+
             if (c != null ) {
-
                 if  (c.moveToFirst()) {
-//                    Log.d("before count", "" + c.getCount());
+//                    Log.d("before-count", "" + c.getCount());
                     do {
                         HashMap<String,String> data = new HashMap<>();
-                        String firstName = c.getString(c.getColumnIndex("name"));
+                        String title = c.getString(c.getColumnIndex("title"));
+                        String type = c.getString(c.getColumnIndex("type"));
+                        String file = c.getString(c.getColumnIndex("file"));
 
-                        int age = c.getInt(c.getColumnIndex("id"));
-
-                            data.put("title", firstName);
-                            data.put("type", new String(age + " "));
-                            data.put("file", " " + firstName);
-                            count++;
+                            data.put("title", title);
+                            data.put("type", type);
+                            data.put("file", file);
                             this.results.add(data);
 
                     }while (c.moveToNext());
 
                 }
-//                Log.d("total-count", "" + count);
             }
             c.close();
+            db.close();
         } catch (SQLiteException se ) {
 
-            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-
-        } finally {
-
-            if (db != null)
-
-                db.execSQL("DELETE FROM " + tableName);
-
-            db.close();
+            Log.e(getClass().getSimpleName(), "Could'nt Open the database");
 
         }
     }
@@ -168,15 +160,40 @@ public class SearchResultsActivity extends AppCompatActivity {
         } else {
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openManga();
+
+                HashMap<String, String>  data = getItem(position);
+                String fileType = data.get("type");
+                String filePath = data.get("file");
+                openContentReader(fileType, filePath);
+
             }
         });
         ListAdapter adapter = new SearchViewAdapter(SearchResultsActivity.this, this.results);
         lv.setAdapter(null);
         lv.setAdapter(adapter);
         }
+    }
+
+    //use filePath when upload work will be completed by manga and pdf teams
+    public void openContentReader(String fileType, String filePath) {
+        Log.d("ABC", "opencontent");
+        switch (fileType) {
+            case "pdf" : openPdfReader();
+                break;
+            case "epub" : openEpub();
+                break;
+            case "manga" : openManga();
+                break;
+            case "doc" : openDocReader();
+                break;
+        }
+    }
+
+    public HashMap<String, String> getItem(int position) {
+        return this.results.get(position);
     }
 
     public void openManga() {

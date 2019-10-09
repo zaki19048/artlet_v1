@@ -36,10 +36,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_Content = "CREATE TABLE " + TableContentClass.TABLE_Content + " ( " + TableContentClass.CONTENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableContentClass.CONTENT_TITLE + " VARCHAR(255), " + TableContentClass.CONTENT_AUTHORID + " INT(11) NOT NULL, " + TableContentClass.CONTENT_GENREID + " INT(11), " + TableContentClass.CONTENT_TYPE + " VARCHAR(255), " + TableContentClass.CONTENT_FILE + " VARCHAR(255), " + TableContentClass.CONTENT_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )\n";
 
     //tag tabel create statement
-    private static final String CREATE_TABLE_Tag = "CREATE TABLE " + TableTagClass.TABLE_Tags + " ( " + TableTagClass.TAG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableTagClass.TAG_CONTENTID + " INT(11) , " + TableTagClass.TAG_NAME + " VARCHAR(255) NOT NULL, " + TableTagClass.TAG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )";
+    private static final String CREATE_TABLE_Tag = "CREATE TABLE " + TableTagClass.TABLE_Tags + " ( " + TableTagClass.TAG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableTagClass.TAG_CONTENTID + " INT(11) , " + TableTagClass.TAG_NAME + " VARCHAR(255) NOT NULL, " + TableTagClass.TAG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (" + TableTagClass.TAG_CONTENTID + ") REFERENCES " + TableContentClass.TABLE_Content + " (" + TableContentClass.CONTENT_ID + "))";
 
     //user_genre table create statement
-    private static final String CREATE_TABLE_User_Genre = "CREATE TABLE " + TableUserGenreClass.TABLE_User_Genre + " ( " + TableUserGenreClass.USERGENRE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableUserGenreClass.UG_GENREID + " INT(11) REFERENCES " + TableGenreClass.GENRE_ID + ", " + TableUserGenreClass.UG_USERID + " INT(11), " + TableUserGenreClass.UG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )";
+    private static final String CREATE_TABLE_User_Genre = "CREATE TABLE " + TableUserGenreClass.TABLE_User_Genre + " ( " + TableUserGenreClass.USERGENRE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TableUserGenreClass.UG_GENREID + " INT(11), " + TableUserGenreClass.UG_USERID + " INT(11), " + TableUserGenreClass.UG_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (" + TableUserGenreClass.UG_USERID + ") REFERENCES "+ TableUserClass.TABLE_Users + " (" + TableUserClass.USER_ID + "), FOREIGN KEY (" + TableUserGenreClass.UG_GENREID + ") REFERENCES " + TableGenreClass.TABLE_Genre + " (" + TableGenreClass.GENRE_ID + ") )";
 
     // SQLiteDatabase object to write and read the database created
     protected SQLiteDatabase db;
@@ -59,6 +59,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_Content);
         db.execSQL(CREATE_TABLE_User_Genre);
         Log.d("Tables Created", "Inside OnCreate");
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db){
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     public void InsertUserData(DatabaseHelper dh,  String user_name, String user_email, String user_password, String user_location)

@@ -39,6 +39,7 @@ public class DashboardActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo( searchManager.getSearchableInfo(new
                 ComponentName(this,SearchResultsActivity.class)));
         return true;
@@ -53,5 +54,13 @@ public class DashboardActivity extends AppCompatActivity {
     public void testEpub(View view) {
         FolioReader folioReader = FolioReader.get();
         folioReader.openBook(R.raw.lightningthief);
+    }
+
+    public void openDoc(View view) {
+        //ISHANI; YOUR CODE GOES HERE
+    }
+
+    public void openPdf(View view) {
+        //UTSAV; YOUR CODE GOES HERE
     }
 }
