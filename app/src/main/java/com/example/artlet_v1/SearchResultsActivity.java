@@ -1,7 +1,6 @@
 package com.example.artlet_v1;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,6 +35,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         handleIntent(getIntent());
+        String query = getIntent().getStringExtra(SearchManager.QUERY);
+        this.query = query;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -44,9 +45,25 @@ public class SearchResultsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(SearchResultsActivity.this, SearchResultsActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
+                return false;
+            }
 
-        searchView.setSearchableInfo( searchManager.getSearchableInfo(new
-                ComponentName(this,SearchResultsActivity.class)));
+            @Override
+            public boolean onQueryTextChange(String query) {
+                Intent intent = new Intent(SearchResultsActivity.this, SearchResultsActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
+                return false;
+            }
+        });
+        searchView.setIconified(false);
+        searchView.setQuery(this.query, false);
         return true;
     }
 
@@ -57,7 +74,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
-                // overridePendingTransition(R.animator.anim_left, R.animator.anim_right);
                 return true;
 
             default:
@@ -101,14 +117,17 @@ public class SearchResultsActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         try {
-
-            Cursor c = db.rawQuery("SELECT id, name FROM genre WHERE name=?", new String[] {this.query});
+            String lowerQuery = this.query.toLowerCase();
+            //Join query to be used : private final String MY_QUERY = "SELECT id, name, type , file,  FROM content c1 INNER JOIN tag ON content.id=tag.content_id WHERE tag.name like ?";
+            //db.rawQuery(MY_QUERY, new String[]{String.valueOf(propertyId)});
+            Cursor c = db.rawQuery("SELECT id, name FROM genre WHERE LOWER(name) like ?", new String[] {"%" + lowerQuery + "%"});
+//            Cursor c = db.rawQuery("SELECT id, name FROM genre", null);
 
             int count = 0;
             if (c != null ) {
 
                 if  (c.moveToFirst()) {
-                    Log.d("before count", "" + c.getCount());
+//                    Log.d("before count", "" + c.getCount());
                     do {
                         HashMap<String,String> data = new HashMap<>();
                         String firstName = c.getString(c.getColumnIndex("name"));
@@ -124,7 +143,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }while (c.moveToNext());
 
                 }
-                Log.d("total-count", "" + count);
+//                Log.d("total-count", "" + count);
             }
             c.close();
         } catch (SQLiteException se ) {
@@ -144,6 +163,10 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void displayResultList() {
         ListView lv = (ListView) findViewById(R.id.user_list);
+        if(this.results.size() == 0) {
+            lv.setEmptyView(this.findViewById(R.id.empty));
+        } else {
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -151,7 +174,14 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
         });
         ListAdapter adapter = new SearchViewAdapter(SearchResultsActivity.this, this.results);
+        lv.setAdapter(null);
         lv.setAdapter(adapter);
+        }
+    }
+
+    public void openManga() {
+        Intent intent = new Intent(SearchResultsActivity.this, MangaReader.class);
+        startActivity(intent);
     }
 
     public void openEpub() {
@@ -159,9 +189,15 @@ public class SearchResultsActivity extends AppCompatActivity {
         folioReader.openBook(R.raw.lightningthief);
     }
 
-    public void openManga() {
-                Intent intent = new Intent(SearchResultsActivity.this, MangaReader.class);
-                startActivity(intent);
+    public void openPdfReader() {
+        Intent intent = new Intent(SearchResultsActivity.this, MangaReader.class);
+        startActivity(intent);
+    }
+
+
+    public void openDocReader() {
+        Intent intent = new Intent(SearchResultsActivity.this, MangaReader.class);
+        startActivity(intent);
     }
 
 }

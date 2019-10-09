@@ -11,7 +11,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".DashboardActivity" />
+
+        <activity android:name=".DashboardActivity">
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+    </activity>
+
         <activity android:name=".MangaReader" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -25,7 +31,6 @@
         </activity>
         <activity
             android:name=".SearchResultsActivity"
-            android:label="@string/title_activity_search_results"
             android:launchMode="singleTop">
 
             <intent-filter>

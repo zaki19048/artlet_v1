@@ -11,7 +11,6 @@ import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper db;
 
@@ -21,37 +20,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.db = new DatabaseHelper(getApplicationContext());
-//        DatabaseHelper d1 = new DatabaseHelper(this);
-//        this.db.InsertGenreData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
-//                intent.putExtra("query", query);
-//                startActivity(intent);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
         searchView.setSearchableInfo( searchManager.getSearchableInfo(new
                 ComponentName(this,SearchResultsActivity.class)));
-//        searchView.setIconifiedByDefault(true);
-//        Intent intent = new Intent(this, SearchResultsActivity.class);
         return true;
     }
 

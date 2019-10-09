@@ -73,6 +73,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("Inside InsertUSerData", "One row inserted");
     }
 
+    //will be removed later; may be used
+    public void InsertGenreData()
+    {
+        db = getWritableDatabase();
+        String insertValues = " INSERT INTO " + TableGenreClass.TABLE_Genre + " ( '" + TableGenreClass.GENRE_NAME + "' ) VALUES ('Narrative'), ('Drama'), ('Novel'), ('Poetry'), ('Science Fiction'), ('Non-Fiction'), ('Short-Story'), ('Autobiography'), ('Historical Fiction'), ('Horror'), ('Crime'), ('Memoir'), ('Comedy'), ('Satire'), ('Romance'), ('Play'), ('Prose'), ('Suspense'), ('Legend'), ('Thriller'), ('Tragedy'), ('Young Adult Fiction'), ('Myth'), ('Occult Fiction'), ('Screenplay'), ('Children Literature'), ('Alternate History'), ('Magical Realism'), ('Mystery'), ('Anthology'), ('Detective Fiction') ";
+        db.execSQL(insertValues);
+    }
+
 
 
     @Override

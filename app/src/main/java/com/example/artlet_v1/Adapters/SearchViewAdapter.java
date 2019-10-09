@@ -41,7 +41,7 @@ public class SearchViewAdapter extends BaseAdapter {
 
             holder = new Holder();
 
-            holder.textviewname = (TextView) child.findViewById(R.id.name);
+            holder.textviewname = (TextView) child.findViewById(R.id.title);
             child.setTag(holder);
 
         } else {
@@ -52,7 +52,7 @@ public class SearchViewAdapter extends BaseAdapter {
         HashMap<String, String> value = this.results.get(position);
 
         holder.textviewname.setText(value.get("title"));
-//      holder.textviewphone_number.setText(User_PhoneNumber.get(position));
+//      holder.textviewfile.setText(file.get(position));
 
         return child;
     }
