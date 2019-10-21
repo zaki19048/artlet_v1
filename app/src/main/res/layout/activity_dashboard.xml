@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:id="@+id/dashboardactivity"
-    tools:context=".DashboardActivity">
+    tools:context=".DashboardActivity"
+    tools:openDrawer="start">
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/txt1"
         android:layout_width="match_parent"
@@ -45,8 +53,8 @@
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
             android:background="@color/pink"
-            android:paddingLeft="5dp"
             android:onClick="openPdf"
+            android:paddingLeft="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/pdf" />
     </LinearLayout>
@@ -69,9 +77,7 @@
             android:paddingRight="5dp"
             android:scaleType="fitCenter"
             android:onClick="openDoc"
-            android:src="@drawable/man_reading"
-
-            />
+            android:src="@drawable/man_reading" />
 
         <ImageButton
             android:id="@+id/ib4"
@@ -86,4 +92,24 @@
             android:src="@drawable/epub" />
     </LinearLayout>
 
-</LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_container"/>
+
+    </LinearLayout>
+
+
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/nav_view"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu"
+        android:layout_gravity="start"
+        android:animateLayoutChanges="true"
+        />
+
+</androidx.drawerlayout.widget.DrawerLayout>
