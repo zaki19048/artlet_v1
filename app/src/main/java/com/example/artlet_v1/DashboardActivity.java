@@ -13,6 +13,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -31,13 +32,56 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        this.drawer=findViewById(R.id.dashboardactivity);
-//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, this.drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_hamburger);
-//        // to remove app title from action bar
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().set
+//        getSupportActionBar().setLogo(R.drawable.ic_hamburger);
+//        getSupportActionBar().setDisplayUseLogoEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        SpannableString s = new SpannableString(settingsItemTitle);
+//
+//        s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_LEFT), 0, s.length(), 0);
+//
+//        item.setTitle(s);
 
+        this.drawer=findViewById(R.id.dashboardactivity);
+
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,
+                this.drawer,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().show();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().hide();
+            }
+        };
+        this.drawer.addDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);// set drawable icon
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+//                Toast.makeText(this, "click..!!", Toast.LENGTH_SHORT).show();
+                this.drawer.openDrawer(Gravity.LEFT);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override
@@ -99,6 +143,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 getSupportActionBar().hide();
+                getActionBar().hide();
                 openNavBar();
                 return true;
             }

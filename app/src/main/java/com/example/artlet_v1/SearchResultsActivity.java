@@ -59,6 +59,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                 return false;
             }
         });
+        menu.getItem(0).setVisible(false);
+
         searchView.setIconified(false);
         searchView.setQuery(this.query, false);
         return true;
