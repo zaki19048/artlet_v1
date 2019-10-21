@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +13,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -31,25 +30,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        Toolbar toolBar=findViewById(R.id.toolbar);
-        setSupportActionBar(toolBar);
-        drawer=findViewById(R.id.dashboardactivity);
-        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawer,toolBar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
 
-        drawer.addDrawerListener(toggle);
-        NavigationView navigationView=findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        toggle.syncState();
-
-
-
-// -------Can be used later; dont remove
-//        Search_Fragment searchFragment = new Search_Fragment();
-//        FragmentManager mFragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-//        fragmentTransaction.add(R.id.dashboardactivity, searchFragment, "Search_Fragment");
-//        fragmentTransaction.commit();
-
+        this.drawer=findViewById(R.id.dashboardactivity);
+//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, this.drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_hamburger);
+//        // to remove app title from action bar
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().set
 
     }
 
@@ -95,17 +82,33 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
+    // add in every common activity
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo( searchManager.getSearchableInfo(new
                 ComponentName(this,SearchResultsActivity.class)));
+
+//        MenuItem appBar = findViewById(R.id.navBar);
+        MenuItem appBar = menu.getItem(0);
+
+        appBar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                getSupportActionBar().hide();
+                openNavBar();
+                return true;
+            }
+        });
         return true;
     }
 
+    public void openNavBar() {
+        this.drawer.openDrawer(Gravity.LEFT);
+    }
 
     public void testManga(View view) {
         Intent newIntent = new Intent(this, MangaReader.class);

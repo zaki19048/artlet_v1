@@ -11,6 +11,7 @@
     tools:openDrawer="start">
 
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,9 +77,7 @@
             android:paddingRight="5dp"
             android:scaleType="fitCenter"
             android:onClick="openDoc"
-            android:src="@drawable/man_reading"
-
-            />
+            android:src="@drawable/man_reading" />
 
         <ImageButton
             android:id="@+id/ib4"
@@ -111,8 +110,6 @@
         app:menu="@menu/drawer_menu"
         android:layout_gravity="start"
         android:animateLayoutChanges="true"
-
-
         />
 
 </androidx.drawerlayout.widget.DrawerLayout>

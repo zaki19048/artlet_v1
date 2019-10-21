@@ -17,6 +17,7 @@
         <activity
             android:name=".RegisterActivity"
             android:theme="@style/NoActionBar" />
+
         <activity android:name=".DashboardActivity">
 
             <meta-data
