@@ -56,6 +56,24 @@ public class RegisterActivity extends AppCompatActivity {
                 String email=email2.getText().toString().trim();
                 String password=pswd.getText().toString().trim();
                 String name=n.getText().toString().trim();
+
+
+                Boolean validFlag = false;
+                int count = 0;
+                for(int i=0;i<email.length();i++)
+                {
+                    if(email.charAt(i)=='@') {
+                        count++;
+                        if((email.charAt(i+1)>='A'&&email.charAt(i+1)<='Z')||(email.charAt(i+1)>='a'&&email.charAt(i+1)<='z'))
+                            validFlag=true;
+                    }
+                }
+                if(count != 1||!(email.substring(email.length()-4, email.length()).equals(".com"))||!validFlag) {
+                    Toast.makeText(getApplicationContext(), "Enter Valid Email Address", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 if(email.matches("") || password.matches("")|| name.matches(""))
                     showMessage(properties.getProperty("ENTER_ALL_DETAILS"));
                 else{
