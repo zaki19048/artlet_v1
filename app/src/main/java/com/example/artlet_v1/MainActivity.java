@@ -31,4 +31,12 @@ public class MainActivity extends AppCompatActivity {
         Intent i=new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
+
+    public void skip(View v)
+    {
+        Intent goToDashboardIntent = new Intent(this, DashboardActivity.class);
+        goToDashboardIntent.putExtra("key_email","abc@abc.com");
+        goToDashboardIntent.putExtra("key_username", "abc");
+        startActivity(goToDashboardIntent);
+    }
 }
