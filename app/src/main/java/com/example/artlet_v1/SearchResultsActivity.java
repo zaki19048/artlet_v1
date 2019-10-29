@@ -97,8 +97,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         this.query = query;
         showResults();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-             query = intent.getStringExtra(SearchManager.QUERY);
-        showResults();
+            query = intent.getStringExtra(SearchManager.QUERY);
+            showResults();
         }
     }
 
@@ -135,10 +135,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                         String type = c.getString(c.getColumnIndex("type"));
                         String file = c.getString(c.getColumnIndex("file"));
 
-                            data.put("title", title);
-                            data.put("type", type);
-                            data.put("file", file);
-                            this.results.add(data);
+                        data.put("title", title);
+                        data.put("type", type);
+                        data.put("file", file);
+                        this.results.add(data);
 
                     }while (c.moveToNext());
 
@@ -159,21 +159,21 @@ public class SearchResultsActivity extends AppCompatActivity {
             lv.setEmptyView(this.findViewById(R.id.empty));
         } else {
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                HashMap<String, String>  data = getItem(position);
-                String fileType = data.get("type");
-                String filePath = data.get("file");
-                openContentReader(fileType, filePath);
+                    HashMap<String, String>  data = getItem(position);
+                    String fileType = data.get("type");
+                    String filePath = data.get("file");
+                    openContentReader(fileType, filePath);
 
-            }
-        });
-        ListAdapter adapter = new SearchViewAdapter(SearchResultsActivity.this, this.results);
-        lv.setAdapter(null);
-        lv.setAdapter(adapter);
+                }
+            });
+            ListAdapter adapter = new SearchViewAdapter(SearchResultsActivity.this, this.results);
+            lv.setAdapter(null);
+            lv.setAdapter(adapter);
         }
     }
 
@@ -218,3 +218,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
 }
+
+
+
+
