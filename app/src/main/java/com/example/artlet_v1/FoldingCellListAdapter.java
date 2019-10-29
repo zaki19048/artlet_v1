@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.HashSet;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -46,6 +46,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             viewHolder.requestsCount = cell.findViewById(R.id.title_requests_count);
             viewHolder.pledgePrice = cell.findViewById(R.id.title_pledge);
             viewHolder.contentRequestBtn = cell.findViewById(R.id.content_request_btn);
+            viewHolder.artistName = cell.findViewById(R.id.content_name_view);
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -68,6 +69,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         viewHolder.toAddress.setText(item.getToAddress());
         viewHolder.requestsCount.setText(String.valueOf(item.getRequestsCount()));
         viewHolder.pledgePrice.setText(item.getPledgePrice());
+        viewHolder.artistName.setText(item.getFromAddress());
 
         // set custom btn handler for list item from that item
         if (item.getRequestBtnClickListener() != null) {
@@ -108,6 +110,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     private static class ViewHolder {
         TextView price;
         TextView contentRequestBtn;
+        TextView artistName;
         TextView pledgePrice;
         TextView fromAddress;
         TextView toAddress;

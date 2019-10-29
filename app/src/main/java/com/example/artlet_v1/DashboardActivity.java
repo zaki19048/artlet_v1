@@ -4,7 +4,10 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +34,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     DatabaseHelper db;
     MangaReader mr;
     private DrawerLayout drawer;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,42 +43,84 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         ListView theListView = findViewById(R.id.mainListView);
 
+        DatabaseHelper dbHelper = new DatabaseHelper(this.getApplicationContext());
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT title,type, created_at,file FROM content ORDER BY id DESC", null);
+
+
         // prepare elements to display
-        final ArrayList<Item> items = Item.getTestingList();
+
+        final ArrayList<Item> items = Item.getContentList(c);
+
+//        String type = c.getString(c.getColumnIndex("type"));
+
+        int count = 0;
+        if (c != null ) {
+
+            if  (c.moveToFirst()) {
+                Log.d("before-count", "" + c.getCount());
+                do {
+                    final String temp = c.getString(c.getColumnIndex("type"));
 
 
-        // add custom btn handler to first list item
-        items.get(0).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
+                    items.get(count).setRequestBtnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+//                            testManga();
+                            switch (temp) {
+                                case "pdf" : openPdf(v);
+                                    break;
+                                case "epub" : testEpub();
+                                    break;
+                                case "manga" : testManga();
+                                    break;
+                                case "doc" : openDoc(v);
+                                    break;
+                            }
+                        }
+                    });
+                count++;
+                }while (c.moveToNext());
             }
-        });
+        }
 
-        items.get(1).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
-            }
-        });
+//        //check the file content
+//        items.get(0).setRequestBtnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
+//                //
+//                // pass file path
+//                testManga();
+//            }
+//        });
+//
 
-        items.get(2).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testEpub();
-            }
-        });
-
-        items.get(3).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
-            }
-        });
+//        items.get(1).setRequestBtnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
+//                testManga();
+//            }
+//        });
+//
+//        items.get(2).setRequestBtnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
+//                testEpub();
+//            }
+//        });
+//
+//        items.get(3).setRequestBtnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
+//                testManga();
+//            }
+//        });
 
         // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
         final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, items);
@@ -134,7 +180,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);// set drawable icon
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
 
     }

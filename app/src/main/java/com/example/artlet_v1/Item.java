@@ -1,5 +1,7 @@
 package com.example.artlet_v1;
 
+import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -129,14 +131,20 @@ public class Item {
     /**
      * @return List of elements prepared for tests
      */
-    public static ArrayList<Item> getTestingList() {
+    public static ArrayList<Item> getContentList(Cursor c) {
         ArrayList<Item> items = new ArrayList<>();
-        items.add(new Item("957", "521", "One Piece", "Manga", 300, "TODAY", "05:10 PM"));
-        items.add(new Item("328", "116", "One Piece", "Manga", 10, "TODAY", "11:10 AM"));
-        items.add(new Item("01", "350", "One Piece", "Epub", 0, "TODAY", "07:11 PM"));
-        items.add(new Item("289", "150", "One Piece", "Manga", 8, "TODAY", "4:15 AM"));
+        if (c != null ) {
+            if  (c.moveToFirst()) {
+                Log.d("before-count", "" + c.getCount());
+                do {
+                    items.add(new Item(c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), c.getString(c.getColumnIndex("file")), "Manga", 300, "TODAY", c.getString(c.getColumnIndex("created_at"))));
+
+                }while (c.moveToNext());
+
+            }
+        }
+
+//        c.close();
         return items;
-
     }
-
 }
