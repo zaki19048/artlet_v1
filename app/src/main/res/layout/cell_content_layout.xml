@@ -40,12 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-<!--        <ImageView-->
-<!--            android:id="@+id/head_image"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/head_image" />-->
+<!--there was one-piece image over here-->
 
     </RelativeLayout>
 
@@ -198,13 +193,13 @@
         <!-- request button -->
 
         <TextView
-            android:id="@+id/content_like_button"
+            android:id="@+id/content_id"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@color/btnRequest"
             android:padding="10dp"
-            android:text="@string/request_btn_text"
             android:textAlignment="center"
             android:textColor="@color/mainTextColor"
             android:textSize="20sp" />
@@ -220,6 +215,19 @@
             android:textAlignment="center"
             android:textColor="@color/mainTextColor"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/content_like_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="10dp"
+            android:text="Like"
+            android:textAlignment="center"
+            android:textColor="@color/mainTextColor"
+            android:textSize="20sp"
+            android:background="@color/highlight_yellow"
+            />
 
 
     </LinearLayout>
