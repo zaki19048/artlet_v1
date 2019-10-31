@@ -36,6 +36,8 @@
     <string name="deadline_badge" translatable="false">PAGES</string>
     <string name="deadline_time_mock" translatable="false">24</string>
     <string name="request_btn_text" translatable="false">READ</string>
+    <string name="title_activity_pdf_reader">PdfReader</string>
+    <string name="title_activity_file_uploader">FileUploader</string>
 
 
 </resources>
