@@ -39,6 +39,8 @@ public class FirstTime extends Application {
             u1.populateDataUserGenre();
             t1.populateDataTag();
 
+//            d1.InsertLikesDummyData();
+
 
             Log.d("Inside if","bool is still false");
 

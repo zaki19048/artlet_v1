@@ -106,7 +106,6 @@ public class SearchResultsActivity extends AppCompatActivity {
 //        Log.d("search", query);
         fetchDatabaseResults();
         displayResultList();
-
     }
 
     private void fetchDatabaseResults() {
@@ -210,7 +209,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         Intent intent = new Intent(SearchResultsActivity.this, MangaReader.class);
         startActivity(intent);
     }
-
 
     public void openDocReader() {
         Intent intent = new Intent(SearchResultsActivity.this, MangaReader.class);

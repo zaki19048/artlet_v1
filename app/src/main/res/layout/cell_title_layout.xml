@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textColor="@android:color/white"
-            android:textSize="26sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/title_time_label"
@@ -47,7 +47,6 @@
             android:layout_alignParentStart="true"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
-
 
     </RelativeLayout>
     <!-- RIGHT TITLE PART -->
@@ -84,7 +83,7 @@
             android:fadingEdge="horizontal"
             android:singleLine="true"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="19sp" />
 
         <ImageView
             android:id="@+id/title_from_to_dots_divider"
@@ -110,7 +109,6 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
-
         <TextView
             android:id="@+id/title_requests_count"
             style="@style/TitleBadgeText"
@@ -128,7 +126,6 @@
             android:layout_alignLeft="@id/title_requests_count"
             android:layout_alignStart="@id/title_requests_count"
             android:text="@string/requests_count_badge" />
-
 
         <TextView
             android:id="@+id/title_pledge"

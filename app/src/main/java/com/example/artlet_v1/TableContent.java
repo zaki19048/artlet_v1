@@ -18,6 +18,7 @@ public class TableContent {
         public static final String CONTENT_TYPE = "type";
         public static final String CONTENT_FILE = "file";
         public static final String CONTENT_CREATED_AT = "created_at";
+        public static final String CONTENT_LIKES = "likes";
         public static final String TABLE_Content = "content";
 
     }

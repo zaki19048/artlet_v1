@@ -4,7 +4,10 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +34,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     DatabaseHelper db;
     MangaReader mr;
     private DrawerLayout drawer;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,68 +43,90 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         ListView theListView = findViewById(R.id.mainListView);
 
+        DatabaseHelper dbHelper = new DatabaseHelper(this.getApplicationContext());
+
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT content.id as content_id , genre.name as genre_name, user.name as user_name, title, type, likes ,content.created_at as created_at,file FROM content INNER JOIN user ON content.author_id = user.id INNER JOIN genre ON content.genre_id = genre.id ORDER BY content.id DESC", null);
+
         // prepare elements to display
-        final ArrayList<Item> items = Item.getTestingList();
+        final ArrayList<Item> items = Item.getContentList(c);
+
+//        String type = c.getString(c.getColumnIndex("type"));
+
+        int count = 0;
+        if(c.getCount() > 0) {
+            if (c != null) {
+
+                if (c.moveToFirst()) {
+                    Log.d("before-count", "" + c.getCount());
+                    do {
+                        final String temp = c.getString(c.getColumnIndex("type"));
 
 
-        // add custom btn handler to first list item
-        items.get(0).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
+                        items.get(count).setRequestBtnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+//                            testManga();
+                                switch (temp) {
+                                    case "pdf":
+                                        openPdf(v);
+                                        break;
+                                    case "epub":
+                                        testEpub();
+                                        break;
+                                    case "manga":
+                                        testManga();
+                                        break;
+                                    case "doc":
+                                        openDoc(v);
+                                        break;
+                                }
+                            }
+                        });
+//
+//                        }
+//                    });
+                        items.get(count).setLikeBtnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Log.d("inside like", "onClick: liked");
+//                            testManga();
+                                int user_id = 1;
+
+                            }
+                        });
+                        count++;
+                    } while (c.moveToNext());
+                }
             }
-        });
 
-        items.get(1).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
-            }
-        });
 
-        items.get(2).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testEpub();
-            }
-        });
+            // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
+            final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, items);
 
-        items.get(3).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
-            }
-        });
+            // add default btn handler for each request btn on each item if custom handler not found
+            adapter.setDefaultRequestBtnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), "DEFAULT HANDLER FOR ALL BUTTONS", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-        // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-        final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, items);
+            // set elements to adapter
+            theListView.setAdapter(adapter);
 
-        // add default btn handler for each request btn on each item if custom handler not found
-        adapter.setDefaultRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "DEFAULT HANDLER FOR ALL BUTTONS", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // set elements to adapter
-        theListView.setAdapter(adapter);
-
-        // set on click event listener to list view
-        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                // toggle clicked cell state
-                ((FoldingCell) view).toggle(false);
-                // register in adapter that state for selected cell is toggled
-                adapter.registerToggle(pos);
-            }
-        });
-
+            // set on click event listener to list view
+            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                    // toggle clicked cell state
+                    ((FoldingCell) view).toggle(false);
+                    // register in adapter that state for selected cell is toggled
+                    adapter.registerToggle(pos);
+                }
+            });
+        }
 //        getSupportActionBar().setLogo(R.drawable.ic_hamburger);
 //        getSupportActionBar().setDisplayUseLogoEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -134,7 +160,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);// set drawable icon
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
 
     }
@@ -241,4 +266,5 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void openPdf(View view) {
         //UTSAV; YOUR CODE GOES HERE
     }
+
 }

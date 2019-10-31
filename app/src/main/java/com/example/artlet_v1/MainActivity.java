@@ -18,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public void show_login(View v)
     {
         Intent i=new Intent(this, LoginActivity.class);
