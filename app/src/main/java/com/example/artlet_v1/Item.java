@@ -17,6 +17,7 @@ public class Item {
     private String date;
     private String time;
     private String content_id;
+    private String user_name;
 
     private View.OnClickListener requestBtnClickListener;
     private View.OnClickListener likeBtnClickListener;
@@ -24,7 +25,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String genre_name, String num_likes, String content_name, String type, int requestsCount, String date, String time, String content_id) {
+    public Item(String genre_name, String num_likes, String content_name, String type, int requestsCount, String date, String time, String content_id, String user_name) {
         this.genre_name = genre_name;
         this.num_likes = num_likes;
         this.content_name = content_name;
@@ -33,6 +34,7 @@ public class Item {
         this.date = date;
         this.time = time;
         this.content_id = content_id;
+        this.user_name = user_name;
     }
 
     public String getGenre_name() {
@@ -99,6 +101,14 @@ public class Item {
         return content_id;
     }
 
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
     public View.OnClickListener getRequestBtnClickListener() {
         return requestBtnClickListener;
     }
@@ -147,15 +157,27 @@ public class Item {
     /**
      * @return List of elements prepared for tests
      */
-    public static ArrayList<Item> getContentList(Cursor c) {
+    public static ArrayList<Item> getContentList(Cursor c, Cursor d) {
         ArrayList<Item> items = new ArrayList<>();
         if (c != null ) {
             if  (c.moveToFirst()) {
                 Log.d("before-count", "" + c.getCount());
-                do {
-                    items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), 300, "TODAY", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id"))));
+                if(d!=null && d.moveToFirst())
+                {
+                    int x = d.getInt(1);
+                    do {
+                        items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), x, "TODAY", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id")), c.getString(2)));
 
-                }while (c.moveToNext());
+                    } while (c.moveToNext() && d.moveToNext());
+
+                }
+                do {
+                    items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), 0, "TODAY", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id")), c.getString(2)));
+
+                } while (c.moveToNext());
+
+
+
             }
         }
 //        items.add(new Item("957", "521", "One Piece", "Manga", 300, "TODAY", "05:10 PM", "aaa"));
@@ -163,3 +185,4 @@ public class Item {
         return items;
     }
 }
+

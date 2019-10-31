@@ -16,6 +16,7 @@
         android:paddingTop="7dp">
 
         <TextView
+            android:id="@+id/top_content_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -28,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/price_mock"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -39,6 +40,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/head_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/head_image" />
 
 <!--there was one-piece image over here-->
 
@@ -76,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/content_avatar_title"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/oda" />
+                android:src="@mipmap/abc" />
 
             <TextView
                 android:id="@+id/content_name_view"
