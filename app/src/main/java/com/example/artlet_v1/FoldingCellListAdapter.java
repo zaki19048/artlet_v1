@@ -90,17 +90,15 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                     String content_id = viewHolder.content_id.getText().toString();
                     int user_id = 1;
                     if(checkIfAlreadyLiked(db, content_id)) {
-                        // add a like query
-//                        Log.d("inside like", "onClick: liked"+ content_id);
-                        v.setBackgroundResource(R.color.highlight_yellow);
-//                        v.setBackground();
-//                        v.getId();
+//                        v.setBackgroundResource(R.drawable.round);
+                        v.setBackgroundResource(R.color.highlight_blue);
+                        decrementLikesCount(db,content_id);
                         removeLike(db, content_id);
                     }
                     else {
                         insertIntoLikeTable(db, user_id, content_id);
-
-                        v.setBackgroundResource(R.color.highlight_blue);
+                        incrementLikesCount(db, content_id);
+                        v.setBackgroundResource(R.color.highlight_yellow);
 
                     }
                 }
@@ -179,7 +177,22 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 //        Cursor c  = db.rawQuery("DELETE FROM likes where content_id = ? and user_id= ?", new String[]{content_id, "1"});
         db.execSQL("delete from likes where content_id="+content_id+ " and user_id=1");
 
-//        Log.d("like", "deleted");
+    }
+
+    public void decrementLikesCount(SQLiteDatabase db, String content_id) {
+        db.execSQL("UPDATE content \n" +
+                "SET likes = likes - 1\n" +
+                "WHERE id = $content_id\n" +
+                "and id > 0");
+    Log.d("aaa", "decrement likes");
+    }
+
+
+    public void incrementLikesCount(SQLiteDatabase db, String content_id) {
+        db.execSQL("UPDATE content \n" +
+                "SET likes = likes + 1\n" +
+                "WHERE id = $content_id");
+        Log.d("aaa", "increment likes");
     }
 }
 

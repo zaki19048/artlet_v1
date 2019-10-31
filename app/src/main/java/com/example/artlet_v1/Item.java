@@ -29,9 +29,9 @@ public class Item {
         this.num_likes = num_likes;
         this.content_name = content_name;
         this.type = type;
-//        this.requestsCount = requestsCount;
-//        this.date = date;
-//        this.time = time;
+        this.requestsCount = requestsCount;
+        this.date = date;
+        this.time = time;
         this.content_id = content_id;
     }
 
