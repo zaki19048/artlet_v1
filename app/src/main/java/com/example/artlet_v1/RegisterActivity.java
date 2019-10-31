@@ -57,7 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String password=pswd.getText().toString().trim();
                 String name=n.getText().toString().trim();
 
-
                 Boolean validFlag = false;
                 int count = 0;
                 for(int i=0;i<email.length();i++)

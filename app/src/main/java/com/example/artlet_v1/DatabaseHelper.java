@@ -78,6 +78,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("Inside InsertUSerData", "One row inserted");
     }
 
+    public void InsertContentData(DatabaseHelper dh, String title, String authorId, String genreId,
+                                  String type, String filePath, String timeStamp) {
+        db = getWritableDatabase();
+        ContentValues c = new ContentValues();
+        //            private static final String CREATE_TABLE_Content = "CREATE TABLE " + TableContentClass.TABLE_Content + " ( "
+//                    + TableContentClass.CONTENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
+//                    + TableContentClass.CONTENT_TITLE + " VARCHAR(255), "
+//                    + TableContentClass.CONTENT_AUTHORID + " INT(11) NOT NULL, "
+//                    + TableContentClass.CONTENT_GENREID + " INT(11), "
+//                    + TableContentClass.CONTENT_TYPE + " VARCHAR(255), "
+//                    + TableContentClass.CONTENT_FILE + " VARCHAR(255), "
+//                    + TableContentClass.CONTENT_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )\n";
+
+        c.put(TableContentClass.CONTENT_TITLE, title);
+        c.put(TableContentClass.CONTENT_AUTHORID, authorId);
+        c.put(TableContentClass.CONTENT_GENREID, genreId);
+        c.put(TableContentClass.CONTENT_TYPE, type);
+        c.put(TableContentClass.CONTENT_FILE, filePath);
+        c.put(TableContentClass.CONTENT_CREATED_AT, timeStamp);
+        db.insert(TableContentClass.TABLE_Content, null, c);
+        Log.d("InsertContentData", "Inserting file data");
+    }
+
     //will be removed later; may be used
     public void InsertGenreData()
     {
