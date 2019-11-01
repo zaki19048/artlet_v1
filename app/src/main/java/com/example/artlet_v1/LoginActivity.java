@@ -41,9 +41,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void show_login(View v)
     {
-        e=(EditText)findViewById(R.id.et4);
-        p=(EditText)findViewById(R.id.et5);
-        lg=(Button)findViewById(R.id.loginb);
+        e= findViewById(R.id.et4);
+        p= findViewById(R.id.et5);
+        lg= findViewById(R.id.loginb);
         lg.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

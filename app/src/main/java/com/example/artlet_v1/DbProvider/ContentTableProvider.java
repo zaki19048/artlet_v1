@@ -33,7 +33,7 @@ public class ContentTableProvider extends DatabaseHelper {
         c.put(TableContent.TableContentClass.CONTENT_AUTHORID, dummyInt);
         c.put(TableContent.TableContentClass.CONTENT_TITLE, randomString);
         c.put(TableContent.TableContentClass.CONTENT_GENREID, dummyInt);
-        c.put(TableContent.TableContentClass.CONTENT_AUTHORID, dummyInt);
+//        c.put(TableContent.TableContentClass.CONTENT_AUTHORID, dummyInt);
         c.put(TableContent.TableContentClass.CONTENT_TYPE, type);
         c.put(TableContent.TableContentClass.CONTENT_FILE, randomString);
         db.insert(TableContent.TableContentClass.TABLE_Content, null, c);

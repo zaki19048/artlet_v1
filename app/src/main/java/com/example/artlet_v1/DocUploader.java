@@ -7,15 +7,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-
+import android.view.View;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
+import java.util.*;
 
-public class FileUploader extends AppCompatActivity {
+public class DocUploader extends AppCompatActivity {
 
     DatabaseHelper db;
 
@@ -31,7 +31,7 @@ public class FileUploader extends AppCompatActivity {
 
     private void browseFiles() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/pdf, application/zip");
+        intent.setType("application/plain");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, 1);
     }
@@ -44,14 +44,6 @@ public class FileUploader extends AppCompatActivity {
             Uri fileuri = data.getData();
             String   docFilePath = getFileNameByUri(this, fileuri);
             Log.d("FilePath", "onActivityResult: " + docFilePath);
-//            private static final String CREATE_TABLE_Content = "CREATE TABLE " + TableContentClass.TABLE_Content + " ( "
-//                    + TableContentClass.CONTENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
-//                    + TableContentClass.CONTENT_TITLE + " VARCHAR(255), "
-//                    + TableContentClass.CONTENT_AUTHORID + " INT(11) NOT NULL, "
-//                    + TableContentClass.CONTENT_GENREID + " INT(11), "
-//                    + TableContentClass.CONTENT_TYPE + " VARCHAR(255), "
-//                    + TableContentClass.CONTENT_FILE + " VARCHAR(255), "
-//                    + TableContentClass.CONTENT_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP )\n";
             String revTitle = "", revType = "", title = "", type = "";
             for(int i = docFilePath.length() - 1; i >= 0; i--) {
                 if(docFilePath.charAt(i) == '/') {
@@ -69,8 +61,8 @@ public class FileUploader extends AppCompatActivity {
             for(int i = revType.length() - 1; i >= 0; i--) {
                 type += revType.charAt(i);
             }
-            Intent intent = new Intent(this, PdfReader.class);
-            intent.putExtra("pdfPath", docFilePath);
+            Intent intent = new Intent(this, DocActivity.class);
+            intent.putExtra("docPath", docFilePath);
             startActivity(intent);
             db.InsertContentData(db, title, "someId", "someGenreId", type, docFilePath, new Date().toString());
             finish();

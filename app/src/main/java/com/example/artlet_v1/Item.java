@@ -135,7 +135,7 @@ public class Item {
         items.add(new Item("957", "521", "One Piece", "Manga", 300, "TODAY", "05:10 PM"));
         items.add(new Item("328", "116", "One Piece", "Manga", 10, "TODAY", "11:10 AM"));
         items.add(new Item("01", "350", "One Piece", "Epub", 0, "TODAY", "07:11 PM"));
-        items.add(new Item("289", "150", "One Piece", "Manga", 8, "TODAY", "4:15 AM"));
+        items.add(new Item("289", "150", "Doc", "Doc", 8, "TODAY", "4:15 AM"));
         return items;
 
     }

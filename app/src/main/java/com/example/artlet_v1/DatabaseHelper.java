@@ -78,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("Inside InsertUSerData", "One row inserted");
     }
 
+
     public void InsertContentData(DatabaseHelper dh, String title, String authorId, String genreId,
                                   String type, String filePath, String timeStamp) {
         db = getWritableDatabase();
