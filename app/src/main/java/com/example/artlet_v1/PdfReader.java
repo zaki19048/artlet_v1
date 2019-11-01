@@ -28,6 +28,8 @@ public class PdfReader extends Activity implements OnPageChangeListener,OnLoadCo
         String filePath = intent.getStringExtra("pdfPath");
         Log.d("PATH: ", filePath);
         pdfView = (PDFView)findViewById(R.id.pdfView);
+
+
         File file = new File(filePath);
 
         String pdfName = "";

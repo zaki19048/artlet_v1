@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 import java.net.URI;
@@ -31,7 +33,7 @@ public class FileUploader extends AppCompatActivity {
 
     private void browseFiles() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/pdf, application/zip");
+        intent.setType("application/pdf + application/zip + application/epub");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, 1);
     }
@@ -69,12 +71,36 @@ public class FileUploader extends AppCompatActivity {
             for(int i = revType.length() - 1; i >= 0; i--) {
                 type += revType.charAt(i);
             }
-            Intent intent = new Intent(this, PdfReader.class);
-            intent.putExtra("pdfPath", docFilePath);
-            startActivity(intent);
+
+            Log.d("bruno", docFilePath);
+            Log.d("title", title);
+
+            if(type.equals(".zip"))
+            {
+                Intent intent = new Intent(this, MangaReader.class);
+                intent.putExtra("zipPath", docFilePath);
+                startActivity(intent);
+            }
+            else if(type.equals(".epub"))
+            {
+                Intent intent = new Intent(this, EpubReader.class);
+                intent.putExtra("epubPath", docFilePath);
+                startActivity(intent);
+            }
+            else if(type.equals(".pdf"))
+            {
+                Intent intent = new Intent(this, PdfReader.class);
+                intent.putExtra("pdfPath", docFilePath);
+                startActivity(intent);
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "File Type not Supported", Toast.LENGTH_LONG).show();
+                finish();
+            }
             db.InsertContentData(db, title, "someId", "someGenreId", type, docFilePath, new Date().toString());
-            finish();
         }
+        finish();
     }
 
 // get file path
