@@ -166,13 +166,13 @@ public class Item {
                 {
                     int x = d.getInt(1);
                     do {
-                        items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), x, "TODAY", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id")), c.getString(2)));
+                        items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), x, " ", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id")), c.getString(2)));
 
                     } while (c.moveToNext() && d.moveToNext());
 
                 }
                 do {
-                    items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), 0, "TODAY", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id")), c.getString(2)));
+                    items.add(new Item(c.getString(c.getColumnIndex("genre_name")), c.getString(c.getColumnIndex("likes")), c.getString(c.getColumnIndex("title")), c.getString(c.getColumnIndex("type")), 0, " ", c.getString(c.getColumnIndex("created_at")), c.getString(c.getColumnIndex("content_id")), c.getString(2)));
 
                 } while (c.moveToNext());
 

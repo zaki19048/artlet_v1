@@ -1,6 +1,8 @@
 package com.example.artlet_v1;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -55,6 +57,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             viewHolder.likeButton = cell.findViewById(R.id.content_like_button);
             viewHolder.content_id = cell.findViewById(R.id.top_content_id);
             viewHolder.authorName = cell.findViewById(R.id.authorName);
+            viewHolder.likeButton.setFocusable(true);
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -90,12 +93,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                     DatabaseHelper dbHelper = new DatabaseHelper(context);
                     final SQLiteDatabase db = dbHelper.getReadableDatabase();
                     String content_id = viewHolder.content_id.getText().toString();
-                    int user_id = 1;
-                    if(checkIfAlreadyLiked(db, content_id)) {
+
+                    SharedPreferences settings = context.getSharedPreferences("YOUR_USER_ID", 0);
+                    int user_id = settings.getInt("user_id", 1); //0 is the default value
+                    if(checkIfAlreadyLiked(db, content_id, String.valueOf(user_id))) {
 //                        v.setBackgroundResource(R.drawable.round);
                         v.setBackgroundResource(R.color.highlight_blue);
                         decrementLikesCount(db,content_id);
-                        removeLike(db, content_id);
+                        removeLike(db, content_id, user_id);
                     }
                     else {
                         insertIntoLikeTable(db, user_id, content_id);
@@ -106,7 +111,26 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                 }
             });
 
+            /*viewHolder.artistName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DatabaseHelper dbHelper = new DatabaseHelper(context);
+                    final SQLiteDatabase db = dbHelper.getReadableDatabase();
+                    String username = viewHolder.artistName.getText().toString();
+                    String content_id = viewHolder.content_id.getText().toString();
+                    int user_id;
+                    Cursor c  = db.rawQuery("SELECT user_id FROM user where content_id = ? and name = ?", new String[]{content_id, username});
+                    if(c!=null && c.moveToFirst())
+                    {
+                        user_id = c.getInt(0);
+                        Intent n = new Intent(this, UserProfileActivity.class);
+                        n.putExtra("view_userid",user_id);
+                        startActivity(n);
+                    }
 
+
+                }
+            });*/
         } else {
             // (optionally) add "default" handler if no handler found in item
             viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
@@ -168,17 +192,17 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 //        Log.d("aaa", "insertIntoLikeTable: insert like");
     }
 
-    public boolean checkIfAlreadyLiked(SQLiteDatabase db, String content_id) {
-        Cursor c  = db.rawQuery("SELECT * FROM likes where content_id = ? and user_id= ?", new String[]{content_id, "1"});
+    public boolean checkIfAlreadyLiked(SQLiteDatabase db, String content_id, String user_id) {
+        Cursor c  = db.rawQuery("SELECT * FROM likes where content_id = ? and user_id= ?", new String[]{content_id, user_id});
         if(c.getCount() > 0) {
             return true;
         }
         return false;
     }
 
-    public void removeLike(SQLiteDatabase db, String content_id) {
+    public void removeLike(SQLiteDatabase db, String content_id, int user_id) {
 //        Cursor c  = db.rawQuery("DELETE FROM likes where content_id = ? and user_id= ?", new String[]{content_id, "1"});
-        db.execSQL("delete from likes where content_id="+content_id+ " and user_id=1");
+        db.execSQL("delete from likes where content_id="+content_id+ " and " + user_id);
 
     }
 

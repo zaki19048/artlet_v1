@@ -50,6 +50,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         Cursor c = db.rawQuery("SELECT content.id as content_id , genre.name as genre_name, user.name as user_name, title, type, likes ,content.created_at as created_at,file FROM content INNER JOIN user ON content.author_id = user.id INNER JOIN genre ON content.genre_id = genre.id ORDER BY content.id DESC", null);
         Cursor d = db.rawQuery("SELECT user_id, COUNT(id) FROM likes GROUP BY user_id, content_id ", null);
 
+
         // prepare elements to display
         final ArrayList<Item> items = Item.getContentList(c,d);
 
@@ -93,7 +94,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                             public void onClick(View v) {
                                 Log.d("inside like", "onClick: liked");
 //                            testManga();
-                                int user_id = 1;
+                                int user_id=1;
 
                             }
                         });

@@ -235,7 +235,9 @@
             android:textColor="@color/mainTextColor"
             android:textSize="20sp"
             android:background="@color/highlight_yellow"
-            />
+            android:focusableInTouchMode="true">
+            <requestFocus/>
+        </TextView>
 
 
     </LinearLayout>
