@@ -23,7 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.folioreader.FolioReader;
 import com.google.android.material.navigation.NavigationView;
 import com.ramotion.foldingcell.FoldingCell;
-import android.widget.Button;
+
 import java.util.ArrayList;
 
 
@@ -73,6 +73,16 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
                 testManga();
+            }
+        });
+
+        items.get(4).setRequestBtnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DashboardActivity.this, "clicked me!", Toast.LENGTH_SHORT).show();
+                String correspondingUrl = "/storage/emulated/0/Download/test.txt";
+                openDoc(correspondingUrl);
             }
         });
 
@@ -234,8 +244,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         folioReader.openBook(R.raw.lightningthief);
     }
 
-    public void openDoc() {
+    public void openDoc(String path) {
         //ISHANI; YOUR CODE GOES HERE
+        Intent intent = new Intent(this, DocActivity.class);
+        intent.putExtra("docPath", path);
+        startActivity(intent);
     }
 
     public void uploadFile() {
