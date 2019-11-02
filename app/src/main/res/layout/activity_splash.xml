@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".SplashActivity"
+android:background="@drawable/splashimage"
+android:orientation="vertical"
+android:id="@+id/l3"
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:orientation="vertical"
+    android:id="@+id/l1"
+    >
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ARTLET"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@android:dimen/app_icon_size"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="300dp"
+        android:id="@+id/t1"
+        />
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:orientation="vertical"
+    android:id="@+id/l2"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="300dp"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:text="For the Lovers of Art"
+        android:id="@+id/t2"
+        >
+
+    </TextView>
+
+</LinearLayout>
+
+</LinearLayout>
