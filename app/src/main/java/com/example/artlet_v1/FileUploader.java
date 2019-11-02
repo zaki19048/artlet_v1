@@ -34,6 +34,7 @@ public class FileUploader extends AppCompatActivity {
     private void browseFiles() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("application/pdf + application/zip + application/epub");
+//        intent.setType("images/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, 1);
     }
@@ -95,6 +96,7 @@ public class FileUploader extends AppCompatActivity {
             }
             else
             {
+                Log.d("bruno", docFilePath);
                 Toast.makeText(getApplicationContext(), "File Type not Supported", Toast.LENGTH_LONG).show();
                 finish();
             }

@@ -19,14 +19,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 
 public class MangaReader extends AppCompatActivity {
 
     private ViewPager viewpager;
     private FragmentCollectionAdapter adapter;
+
+    private String file_name = "";
+    private Boolean flag;
 
     final String UNZIP_DIR = "imageDir";
 
@@ -36,7 +41,8 @@ public class MangaReader extends AppCompatActivity {
         setContentView(R.layout.activity_manga_reader);
         viewpager = findViewById(R.id.pager);
 
-        String temp = "", file_name = "";
+        String temp = "";
+        flag=true;
         Intent intent = getIntent();
         String path = intent.getStringExtra("zipPath");
 
@@ -56,7 +62,13 @@ public class MangaReader extends AppCompatActivity {
 
         createFolder(UNZIP_DIR);
         copyFile(path, file_name+".zip", getApplicationContext().getExternalFilesDir("/") + "/" + UNZIP_DIR + "/");
-        unzip(file_name, UNZIP_DIR);
+        if(flag)
+            unzip(file_name, UNZIP_DIR);
+        showManga();
+    }
+
+    private void showManga()
+    {
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getExternalFilesDir("/" + UNZIP_DIR + "/"+file_name+"/");
@@ -66,13 +78,15 @@ public class MangaReader extends AppCompatActivity {
         List<File> fileList = new ArrayList<>();
         File [] f = directory.listFiles();
         Log.d("bruno", "length= "+f.length);
+
+        Arrays.sort(f);
+        Log.d("bruno", "Sorted");
         for (int i = 0; i < f.length; i++)
         {
             Log.d("bruno", "FileName:" + f[i].getName());
             fileList.add(f[i]);
         }
         ImageFragment.images = fileList;
-
         adapter = new FragmentCollectionAdapter(getSupportFragmentManager());
         viewpager.setAdapter(adapter);
         viewpager.setPageTransformer(false, new ZoomOutPageTransformer());
@@ -118,6 +132,7 @@ public class MangaReader extends AppCompatActivity {
         if (file.exists())
         {
             Log.d("Hocus", "Already Exists");
+            flag = false;
             return;
         }
 
@@ -159,3 +174,4 @@ public class MangaReader extends AppCompatActivity {
     }
 
 }
+
