@@ -23,22 +23,25 @@ import java.io.InputStreamReader;
 
 public class DocActivity extends AppCompatActivity {
 
+    EditText docTitle;
     EditText editDoc;
     TextView txtDocName;
     Button btnSave;
     String docName = "";
-    EditText docTitle;
+
     String filePath, filePathNew="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc);
-        docTitle = findViewById(R.id.editDoc);
-        txtDocName = findViewById(R.id.docName);
+
+        docTitle = (EditText)findViewById(R.id.editDoc);
+        editDoc = (EditText)findViewById(R.id.editDoc);
+        txtDocName = (TextView)findViewById(R.id.docName);
         Intent intent = getIntent();
         filePath = intent.getStringExtra("docPath");
-        btnSave = findViewById(R.id.btn_save);
+        btnSave = (Button)findViewById(R.id.btn_save);
         File file = new File(filePath);
         for(int i = 0; i < filePath.length(); i++) {
             if(filePath.charAt(i) == '/') {
@@ -56,6 +59,7 @@ public class DocActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 writeFileInternalStorage();
+//                setupTextFieldsByContact();
             }
         });
     }
@@ -79,8 +83,10 @@ public class DocActivity extends AppCompatActivity {
         }
     }
 
-    public void writeFileInternalStorage() {
-        String value = editDoc.getText().toString().trim();
+    public void writeFileInternalStorage(
+
+    ) {
+       // String value = editDoc.getText().toString().trim();
         createUpdateFile();
     }
 

@@ -64,8 +64,14 @@ public class DocUploader extends AppCompatActivity {
             Intent intent = new Intent(this, DocActivity.class);
             intent.putExtra("docPath", docFilePath);
             startActivity(intent);
+
+//            log activity
+
+
             db.InsertContentData(db, title, "someId", "someGenreId", type, docFilePath, new Date().toString());
             finish();
+
+//            log activity.
         }
     }
 
