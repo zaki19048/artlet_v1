@@ -23,7 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.folioreader.FolioReader;
 import com.google.android.material.navigation.NavigationView;
 import com.ramotion.foldingcell.FoldingCell;
-
+import android.widget.Button;
 import java.util.ArrayList;
 
 
@@ -42,13 +42,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         // prepare elements to display
         final ArrayList<Item> items = Item.getTestingList();
 
-
         // add custom btn handler to first list item
         items.get(0).setRequestBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
+                String correspondingUrl = "/storage/emulated/0/Download/epfo.pdf";
+                openPdf(correspondingUrl);
             }
         });
 
@@ -72,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
+                uploadFile();
             }
         });
 
@@ -226,19 +226,28 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     public void testManga() {
         Intent newIntent = new Intent(this, MangaReader.class);
+
         startActivity(newIntent);
     }
 
     public void testEpub() {
-        FolioReader folioReader = FolioReader.get();
-        folioReader.openBook(R.raw.lightningthief);
+        Intent newIntent = new Intent(this, EpubReader.class);
+        startActivity(newIntent);
     }
 
-    public void openDoc(View view) {
+    public void openDoc() {
         //ISHANI; YOUR CODE GOES HERE
     }
 
-    public void openPdf(View view) {
+    public void uploadFile() {
+        Intent intent = new Intent(this, FileUploader.class);
+        startActivity(intent);
+    }
+
+    public void openPdf(String path) {
         //UTSAV; YOUR CODE GOES HERE
+        Intent intent = new Intent(this, PdfReader.class);
+        intent.putExtra("pdfPath", path);
+        startActivity(intent);
     }
 }

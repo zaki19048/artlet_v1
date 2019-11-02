@@ -131,6 +131,7 @@ public class Item {
      */
     public static ArrayList<Item> getTestingList() {
         ArrayList<Item> items = new ArrayList<>();
+        items.add(new Item("1", "23", "Something", "pdf", 20, "TODAY", "01:30 PM"));
         items.add(new Item("957", "521", "One Piece", "Manga", 300, "TODAY", "05:10 PM"));
         items.add(new Item("328", "116", "One Piece", "Manga", 10, "TODAY", "11:10 AM"));
         items.add(new Item("01", "350", "One Piece", "Epub", 0, "TODAY", "07:11 PM"));
