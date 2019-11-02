@@ -57,7 +57,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             viewHolder.likeButton = cell.findViewById(R.id.content_like_button);
             viewHolder.content_id = cell.findViewById(R.id.top_content_id);
             viewHolder.authorName = cell.findViewById(R.id.authorName);
-            viewHolder.likeButton.setFocusable(true);
+            viewHolder.UploadDate = cell.findViewById(R.id.content_delivery_time);
+
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -73,8 +74,10 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             return cell;
 
         // bind data from selected element to view through view holder
+        String s = item.getTime();
+        String[] parts = s.split(" ");
         viewHolder.genre_name.setText(item.getGenre_name());
-        viewHolder.time.setText(item.getTime());
+        viewHolder.time.setText(parts[0]);
         viewHolder.date.setText(item.getDate());
         viewHolder.content_name.setText(item.getContent_name());
         viewHolder.type.setText(item.getType());
@@ -83,63 +86,87 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         viewHolder.artistName.setText(item.getUser_name());
         viewHolder.authorName.setText(item.getUser_name());
         viewHolder.content_id.setText(item.getContentId());
+        viewHolder.UploadDate.setText(parts[0]);
+
 
         // set custom btn handler for list item from that item
         if (item.getRequestBtnClickListener() != null) {
             viewHolder.contentRequestBtn.setOnClickListener(item.getRequestBtnClickListener());
+            DatabaseHelper dbHelper = new DatabaseHelper(context);
+            final SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String content_id = viewHolder.content_id.getText().toString();
+            SharedPreferences settings = context.getSharedPreferences("YOUR_USER_ID", 0);
+            int user_id = settings.getInt("user_id", 1); //0 is the default value
+            if(checkIfAlreadyLiked(db, content_id, String.valueOf(user_id)))
+            {
+                viewHolder.likeButton.setBackgroundResource(R.color.highlight_blue);
+            }
+
             viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DatabaseHelper dbHelper = new DatabaseHelper(context);
                     final SQLiteDatabase db = dbHelper.getReadableDatabase();
                     String content_id = viewHolder.content_id.getText().toString();
-
                     SharedPreferences settings = context.getSharedPreferences("YOUR_USER_ID", 0);
                     int user_id = settings.getInt("user_id", 1); //0 is the default value
                     if(checkIfAlreadyLiked(db, content_id, String.valueOf(user_id))) {
 //                        v.setBackgroundResource(R.drawable.round);
-                        v.setBackgroundResource(R.color.highlight_blue);
+
                         decrementLikesCount(db,content_id);
                         removeLike(db, content_id, user_id);
+                        v.setBackgroundResource(R.color.highlight_yellow);
                     }
                     else {
                         insertIntoLikeTable(db, user_id, content_id);
                         incrementLikesCount(db, content_id);
-                        v.setBackgroundResource(R.color.highlight_yellow);
+                        v.setBackgroundResource(R.color.highlight_blue);
+
 
                     }
                 }
             });
 
-            /*viewHolder.artistName.setOnClickListener(new View.OnClickListener() {
+
+            // listener to open user profile on name click from cell content layout
+            viewHolder.artistName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("check","inside up listener");
                     DatabaseHelper dbHelper = new DatabaseHelper(context);
                     final SQLiteDatabase db = dbHelper.getReadableDatabase();
                     String username = viewHolder.artistName.getText().toString();
                     String content_id = viewHolder.content_id.getText().toString();
                     int user_id;
-                    Cursor c  = db.rawQuery("SELECT user_id FROM user where content_id = ? and name = ?", new String[]{content_id, username});
+                    Cursor c  = db.rawQuery("SELECT user.id FROM user INNER JOIN content on content.author_id = user.id where content.id = ? and user.name = ?", new String[]{content_id, username});
                     if(c!=null && c.moveToFirst())
                     {
                         user_id = c.getInt(0);
-                        Intent n = new Intent(this, UserProfileActivity.class);
+                        Intent n = new Intent(view.getContext(), TestActvity.class);
                         n.putExtra("view_userid",user_id);
-                        startActivity(n);
+                        view.getContext().startActivity(n);
                     }
 
 
                 }
-            });*/
+
+
+
+            });
+
+            Log.d("check", "outside up listener");
+
+
+
         } else {
             // (optionally) add "default" handler if no handler found in item
             viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
-          /*  viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("inside like", "onClick: liked");
                 }
-            });*/
+            });
 
         }
 
@@ -148,6 +175,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 
     // simple methods for register cell state changes
     public void registerToggle(int position) {
+        Log.d("check","inside registertoggle");
         if (unfoldedIndexes.contains(position))
             registerFold(position);
         else
@@ -155,10 +183,12 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     }
 
     public void registerFold(int position) {
+        Log.d("check","isnide remove");
         unfoldedIndexes.remove(position);
     }
 
     public void registerUnfold(int position) {
+        Log.d("check","inside add");
         unfoldedIndexes.add(position);
     }
 
@@ -184,12 +214,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         TextView content_id;
         TextView likeButton;
         TextView authorName;
+        TextView UploadDate;
+
     }
 
     public void insertIntoLikeTable(SQLiteDatabase db, int user_id, String content_id) {
         db.execSQL("INSERT INTO 'likes' ('user_id', 'content_id' ) VALUES (?, ?)", new String[]{String.valueOf(user_id), String.valueOf(content_id)});
 //        Cursor c = db.rawQuery("INSERT INTO like values(")
-//        Log.d("aaa", "insertIntoLikeTable: insert like");
+        Log.d("aaa", "insertIntoLikeTable: insert like");
     }
 
     public boolean checkIfAlreadyLiked(SQLiteDatabase db, String content_id, String user_id) {
@@ -200,18 +232,20 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         return false;
     }
 
+
     public void removeLike(SQLiteDatabase db, String content_id, int user_id) {
 //        Cursor c  = db.rawQuery("DELETE FROM likes where content_id = ? and user_id= ?", new String[]{content_id, "1"});
         db.execSQL("delete from likes where content_id="+content_id+ " and " + user_id);
 
     }
 
+
     public void decrementLikesCount(SQLiteDatabase db, String content_id) {
         db.execSQL("UPDATE content \n" +
                 "SET likes = likes - 1\n" +
                 "WHERE id = $content_id\n" +
                 "and id > 0");
-    Log.d("aaa", "decrement likes");
+        Log.d("aaa", "decrement likes");
     }
 
 
@@ -222,4 +256,3 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         Log.d("aaa", "increment likes");
     }
 }
-

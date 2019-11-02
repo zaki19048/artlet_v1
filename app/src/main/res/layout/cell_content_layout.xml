@@ -96,7 +96,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/content_avatar"
                 android:layout_toRightOf="@id/content_avatar"
-                android:text="@string/client_name_mock"
                 android:textColor="@color/mainTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -151,7 +150,6 @@
                     android:layout_alignLeft="@id/content_delivery_time"
                     android:layout_alignStart="@id/content_delivery_time"
                     android:layout_below="@id/content_delivery_time"
-                    android:text="@string/delivery_date_mock"
                     android:textColor="@color/mainTextColor"
                     android:textSize="14sp" />
 

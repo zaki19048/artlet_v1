@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.folioreader.FolioReader;
+import com.folioreader.ui.adapter.ViewHolder;
 import com.google.android.material.navigation.NavigationView;
 import com.ramotion.foldingcell.FoldingCell;
 
@@ -247,6 +248,14 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
     public void openNavBar() {
         this.drawer.openDrawer(Gravity.LEFT);
     }
@@ -268,5 +277,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void openPdf(View view) {
         //UTSAV; YOUR CODE GOES HERE
     }
+
 
 }

@@ -10,22 +10,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".TestActvity"></activity>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:theme="@style/NoActionBar" />
-
         <activity android:name=".DashboardActivity">
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-
         <activity android:name=".MangaReader" />
         <activity
             android:name=".MainActivity"

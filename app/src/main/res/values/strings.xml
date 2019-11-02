@@ -34,7 +34,7 @@
     <string name="delivery_time_mock" translatable="false">6:30 pm</string>
     <string name="delivery_date_mock" translatable="false">October 22, 2019</string>
     <string name="deadline_badge" translatable="false">LIKES</string>
-    <string name="deadline_time_mock" translatable="false">24</string>
+    <string name="deadline_time_mock" translatable="false"></string>
     <string name="request_btn_text" translatable="false">READ</string>
 
 

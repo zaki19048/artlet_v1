@@ -44,7 +44,7 @@ public class UserTableProvider extends DatabaseHelper {
 
     public void populateDataUser() {
         int i = 1;
-        while(i <= 50) {
+        while(i <= 100) {
             populateRowUser(randomGenerator(initial), i);
             i=i+1;
         }
