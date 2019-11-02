@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.folioreader.FolioReader;
+import com.folioreader.ui.adapter.ViewHolder;
 import com.google.android.material.navigation.NavigationView;
 import com.ramotion.foldingcell.FoldingCell;
 
@@ -48,9 +49,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor c = db.rawQuery("SELECT content.id as content_id , genre.name as genre_name, user.name as user_name, title, type, likes ,content.created_at as created_at,file FROM content INNER JOIN user ON content.author_id = user.id INNER JOIN genre ON content.genre_id = genre.id ORDER BY content.id DESC", null);
+        Cursor d = db.rawQuery("SELECT user_id, COUNT(id) FROM likes GROUP BY user_id, content_id ", null);
+
 
         // prepare elements to display
-        final ArrayList<Item> items = Item.getContentList(c);
+        final ArrayList<Item> items = Item.getContentList(c,d);
 
 //        String type = c.getString(c.getColumnIndex("type"));
 
@@ -92,7 +95,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                             public void onClick(View v) {
                                 Log.d("inside like", "onClick: liked");
 //                            testManga();
-                                int user_id = 1;
+                                int user_id=1;
 
                             }
                         });
@@ -245,6 +248,14 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
     public void openNavBar() {
         this.drawer.openDrawer(Gravity.LEFT);
     }
@@ -266,5 +277,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void openPdf(View view) {
         //UTSAV; YOUR CODE GOES HERE
     }
+
 
 }

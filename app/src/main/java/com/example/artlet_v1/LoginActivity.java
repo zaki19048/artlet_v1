@@ -2,6 +2,7 @@ package com.example.artlet_v1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private Properties properties;
     private PropertyReader propertyReader;
     private Context context;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 else if(password.matches(""))
                     showMessage(properties.getProperty("ENTER_PASSWORD"));
                 else{
+
                     checkLoginDetails(email, password);
                 }
             }
@@ -66,21 +69,29 @@ public class LoginActivity extends AppCompatActivity {
 
     public void checkLoginDetails(String email, String password){
         databaseObj = databaseHelper.getReadableDatabase();
-        String query = "SELECT "+TableUser.TableUserClass.USER_EMAIL+", "+TableUser.TableUserClass.USER_NAME
-                        +" FROM "+ TableUser.TableUserClass.TABLE_Users
-                        +" WHERE email='"+email +"' AND password='"+password+"'";
+        String query = "SELECT "+TableUser.TableUserClass.USER_EMAIL+", "+TableUser.TableUserClass.USER_NAME +", "+ TableUser.TableUserClass.USER_ID
+                +" FROM "+ TableUser.TableUserClass.TABLE_Users
+                +" WHERE email='"+email +"' AND password='"+password+"'";
 
         cursor = databaseObj.rawQuery(query,null);
 
         if (cursor!= null && cursor.moveToFirst() && cursor.getCount()>0) {
             String loginEmail = cursor.getString(0);
             String loginName = cursor.getString(1);
+            int loginUserId = cursor.getInt(2);
 
             showMessage(properties.getProperty("LOGIN_SUCCESS"));
+            SharedPreferences settings = getSharedPreferences("YOUR_USER_ID", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("user_id",loginUserId);
+            editor.commit();
 
             Intent goToDashboardIntent = new Intent(this, DashboardActivity.class);
+
+            goToDashboardIntent.putExtra("key_userid", loginUserId);
             goToDashboardIntent.putExtra("key_email",loginEmail);
             goToDashboardIntent.putExtra("key_username", loginName);
+
             startActivity(goToDashboardIntent);
         }
         else{
