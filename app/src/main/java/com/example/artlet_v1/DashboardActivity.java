@@ -72,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-                testManga();
+                uploadFile();
             }
         });
 
@@ -226,12 +226,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     public void testManga() {
         Intent newIntent = new Intent(this, MangaReader.class);
+
         startActivity(newIntent);
     }
 
     public void testEpub() {
-        FolioReader folioReader = FolioReader.get();
-        folioReader.openBook(R.raw.lightningthief);
+        Intent newIntent = new Intent(this, EpubReader.class);
+        startActivity(newIntent);
     }
 
     public void openDoc() {

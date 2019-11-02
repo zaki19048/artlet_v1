@@ -1,6 +1,7 @@
 package com.example.artlet_v1;
 
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,39 +12,85 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 
 public class MangaReader extends AppCompatActivity {
 
     private ViewPager viewpager;
     private FragmentCollectionAdapter adapter;
 
-    //static int[] drawables;
+    private String file_name = "";
+    private Boolean flag;
+
+    final String UNZIP_DIR = "imageDir";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manga_reader);
         viewpager = findViewById(R.id.pager);
-        createFolder("imageDir");
+
+        String temp = "";
+        flag=true;
+        Intent intent = getIntent();
+        String path = intent.getStringExtra("zipPath");
+
+        for (int i = path.length() - 5; i >= 0; i--) {
+            if (path.charAt(i) != '/')
+                temp += path.charAt(i);
+            else
+                break;
+        }
+        for (int i = temp.length() - 1; i >= 0; i--) {
+            file_name += temp.charAt(i);
+        }
+        Log.d("bruno", file_name);
+        Log.d("bruno", path);
+        Log.d("bruno", getApplicationContext().getExternalFilesDir("/") + "/" + UNZIP_DIR);
+
+
+        createFolder(UNZIP_DIR);
+        copyFile(path, file_name+".zip", getApplicationContext().getExternalFilesDir("/") + "/" + UNZIP_DIR + "/");
+        if(flag)
+            unzip(file_name, UNZIP_DIR);
+        showManga();
+    }
+
+    private void showManga()
+    {
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getExternalFilesDir("imageDir/Blep");
+        File directory = cw.getExternalFilesDir("/" + UNZIP_DIR + "/"+file_name+"/");
+        Log.d("bruno", getApplicationContext().getExternalFilesDir("/") + "/" + UNZIP_DIR + "/"+file_name+"/");
+        Log.d("bruno", directory.getPath());
+
         List<File> fileList = new ArrayList<>();
-        for (int i = 4; i < 20; i++) {
-            File file = new File(directory, "m" + i + ".jpg");
-            fileList.add(file);
+        File [] f = directory.listFiles();
+        Log.d("bruno", "length= "+f.length);
+
+        Arrays.sort(f);
+        Log.d("bruno", "Sorted");
+        for (int i = 0; i < f.length; i++)
+        {
+            Log.d("bruno", "FileName:" + f[i].getName());
+            fileList.add(f[i]);
         }
         ImageFragment.images = fileList;
-
         adapter = new FragmentCollectionAdapter(getSupportFragmentManager());
         viewpager.setAdapter(adapter);
         viewpager.setPageTransformer(false, new ZoomOutPageTransformer());
+
     }
 
     public void createFolder(String fname) {
@@ -57,62 +104,74 @@ public class MangaReader extends AppCompatActivity {
             } else {
                 Toast.makeText(this, myfolder + " can be created.", Toast.LENGTH_LONG).show();
                 f.mkdirs();
-
-                ///////////////////////////////////////////////////////////////////
-                // Copy file from assets to folder
-                AssetManager assetManager = getAssets();
-                String[] files = null;
-                try {
-                    files = assetManager.list("");
-                } catch (IOException e) {
-                    Log.e("tag", "Failed to get asset file list.", e);
-                }
-                for (String filename : files) {
-                    InputStream in = null;
-                    OutputStream out = null;
-                    try {
-                        in = assetManager.open(filename);
-
-                        File outFile = new File(myfolder, filename);
-
-                        out = new FileOutputStream(outFile);
-                        copyFile(in, out);
-                        in.close();
-                        in = null;
-                        out.flush();
-                        out.close();
-                        out = null;
-                    } catch (IOException e) {
-                        Log.e("tag", "Failed to copy asset file: " + filename, e);
-                    }
-                }
-                ///////////////////////////////////////////////////////////////////////////
             }
         else
             Toast.makeText(this, myfolder + " already exits.", Toast.LENGTH_LONG).show();
+    }
 
-
-        // unzip file
-        f = new File(getApplicationContext().getExternalFilesDir("/") + "/" + fname + "/" + "Blep");
+    void unzip(String fileName, String unzipPath)
+    {    // unzip file
+        File f = new File(getApplicationContext().getExternalFilesDir("/") + "/" + unzipPath + "/" + fileName+"Z");
         if (!f.exists()) {
             Toast.makeText(this, "Unzipped", Toast.LENGTH_LONG).show();
-            String zipfilename = "Blep";
-            String zipFile = myfolder + "/" + zipfilename + ".zip";
-            String unzipLocation = myfolder + "/" + zipfilename + "/";
-            Log.d("Zip", zipFile);
-            Log.d("Zip Loc ", myfolder);
+            String zipFile = getApplicationContext().getExternalFilesDir("/")  + "/" + unzipPath + "/" + fileName + ".zip";
+            String unzipLocation = getApplicationContext().getExternalFilesDir("/") + "/" + unzipPath  + "/" + fileName +"/";
+            Log.d("Hocus", "Zip = "+zipFile);
+            Log.d("Hocus", "Loc ="+unzipLocation);
             ZipDecompress df = new ZipDecompress(zipFile, unzipLocation);
             df.unzip();
         } else {
             Toast.makeText(this, "Already Unzipped", Toast.LENGTH_LONG).show();
         }
+
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
+    private void copyFile(String inputPath, String inputFile, String outputPath) {
+
+        File file = new File (outputPath + inputFile);
+        if (file.exists())
+        {
+            Log.d("Hocus", "Already Exists");
+            flag = false;
+            return;
         }
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+
+            //create output directory if it doesn't exist
+            File dir = new File (outputPath);
+            if (!dir.exists())
+            {
+                dir.mkdirs();
+            }
+
+
+            in = new FileInputStream(inputPath);
+            out = new FileOutputStream(outputPath + inputFile);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+
+            // write the output file (You have now copied the file)
+            out.flush();
+            out.close();
+            out = null;
+
+        }  catch (FileNotFoundException fnfe1) {
+            Log.e("tag", fnfe1.getMessage());
+        }
+        catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
     }
+
 }
+
