@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void skip(View v)
     {
-        Intent goToDashboardIntent = new Intent(this, DashboardActivity.class);
+        Intent goToDashboardIntent = new Intent(this, LeaderBoardFragmentt.class);
         goToDashboardIntent.putExtra("key_email","abc@abc.com");
         goToDashboardIntent.putExtra("key_username", "abc");
         startActivity(goToDashboardIntent);

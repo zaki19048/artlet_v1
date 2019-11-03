@@ -15,6 +15,9 @@
             android:name=".LoginActivity"
             android:theme="@style/NoActionBar" />
         <activity
+            android:name=".LeaderBoardFragmentt"
+            android:theme="@style/NoActionBar" />
+        <activity
             android:name=".RegisterActivity"
             android:theme="@style/NoActionBar" />
         <activity android:name=".DashboardActivity">
@@ -22,6 +25,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
         <activity android:name=".MangaReader" />
         <activity
             android:name=".MainActivity"

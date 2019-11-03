@@ -128,35 +128,6 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             });
 
 
-            // listener to open user profile on name click from cell content layout
-            viewHolder.artistName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("check","inside up listener");
-                    DatabaseHelper dbHelper = new DatabaseHelper(context);
-                    final SQLiteDatabase db = dbHelper.getReadableDatabase();
-                    String username = viewHolder.artistName.getText().toString();
-                    String content_id = viewHolder.content_id.getText().toString();
-                    int user_id;
-                    Cursor c  = db.rawQuery("SELECT user.id FROM user INNER JOIN content on content.author_id = user.id where content.id = ? and user.name = ?", new String[]{content_id, username});
-                    if(c!=null && c.moveToFirst())
-                    {
-                        user_id = c.getInt(0);
-                        Intent n = new Intent(view.getContext(), TestActvity.class);
-                        n.putExtra("view_userid",user_id);
-                        view.getContext().startActivity(n);
-                    }
-
-
-                }
-
-
-
-            });
-
-            Log.d("check", "outside up listener");
-
-
 
         } else {
             // (optionally) add "default" handler if no handler found in item
@@ -166,7 +137,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                 public void onClick(View v) {
                     Log.d("inside like", "onClick: liked");
                 }
-            });
+           });
 
         }
 

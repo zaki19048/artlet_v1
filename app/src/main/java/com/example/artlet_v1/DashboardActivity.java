@@ -184,9 +184,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.nav_leaderboard:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new LeaderBoardFragmentt()).commit();
-                break;
+//            case R.id.nav_leaderboard:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new LeaderBoardFragmentt()).commit();
+//                break;
 
             case R.id.nav_feedback:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FeedbackFragmentt()).commit();
