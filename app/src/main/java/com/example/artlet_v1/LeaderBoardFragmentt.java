@@ -23,39 +23,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LeaderBoardFragmentt extends AppCompatActivity {
 
-//    ListView listView;
-//    ArrayList<String> list;
-//    ArrayAdapter<String > adapter;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.fragment_leaderboard);
-//
-//        //searchView = (SearchView) findViewById(R.id.searchView);
-//        listView = (ListView) findViewById(R.id.list_leader);
-//
-//        list = new ArrayList<>();
-//        list.add("C");
-//        list.add("Python");
-//        list.add("C#");
-//        list.add("C++");
-//        list.add("Go");
-//        list.add("PHP");
-//        list.add("HTML");
-//        list.add("Alpha");
-//        list.add("Java");
-//        list.add("Kotlin");
-//        list.add("Forton");
-//        list.add("Pascal");
-//        list.add("Julia");
-//
-//        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-//        listView.setAdapter(adapter);
-//
-//    }
-//}
-
 
 
     ListView lv;
